@@ -1,0 +1,35 @@
+CREATE DATABASE nitkuora;
+
+ALTER TABLE question ADD CONSTRAINT qfkey FOREIGN KEY (q_user_id) REFERENCES user(user_id);
+ALTER TABLE answer ADD CONSTRAINT afkey1 FOREIGN KEY ( a_user_id ) REFERENCES user( user_id ) ;
+ALTER TABLE answer ADD CONSTRAINT afkey2 FOREIGN KEY ( a_question_id ) REFERENCES question( question_id ) ;
+ALTER TABLE comment ADD CONSTRAINT cfkey1 FOREIGN KEY ( c_user_id ) REFERENCES user( user_id );
+ALTER TABLE comment ADD CONSTRAINT cfkey2 FOREIGN KEY ( c_answer_id ) REFERENCES answer( answer_id );
+ALTER TABLE downvote ADD CONSTRAINT dfkey1 FOREIGN KEY ( d_user_id ) REFERENCES user( user_id );
+ALTER TABLE downvote ADD CONSTRAINT dfkey2 FOREIGN KEY ( d_answer_id ) REFERENCES answer( answer_id );
+ALTER TABLE upvote ADD CONSTRAINT ufkey1 FOREIGN KEY ( u_user_id ) REFERENCES user( user_id ) ;
+ALTER TABLE upvote ADD CONSTRAINT ufkey2 FOREIGN KEY ( u_answer_id ) REFERENCES answer( answer_id ) ;
+
+ALTER TABLE `follower_following` ADD CONSTRAINT `fffkey1` FOREIGN KEY ( `user1_id` ) REFERENCES `nitkuora`.`user` (
+`user_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE `follower_following` ADD CONSTRAINT `fffkey2` FOREIGN KEY ( `user2_id` ) REFERENCES `nitkuora`.`user` (
+`user_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE `follower_topic` ADD CONSTRAINT `ftfkey1` FOREIGN KEY ( `user_id` ) REFERENCES `nitkuora`.`user` (
+`user_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE `follower_topic` ADD CONSTRAINT `ftfkey2` FOREIGN KEY ( `topic_id` ) REFERENCES `nitkuora`.`topic` (
+`topic_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ; 
+
+ALTER TABLE `topic_question` ADD CONSTRAINT `tqfkey1` FOREIGN KEY ( `topic_id` ) REFERENCES `nitkuora`.`topic` (
+`topic_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE `topic_question` ADD CONSTRAINT `tqfkey2` FOREIGN KEY ( `question_id` ) REFERENCES `nitkuora`.`question` (
+`question_id`
+) ON DELETE RESTRICT ON UPDATE RESTRICT ;
