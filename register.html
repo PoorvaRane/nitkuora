@@ -22,13 +22,16 @@
 
         <div class="form-box" id="login-box">
             <div class="header">Sign Up</div>
-            <form action="../../index.html" method="post">
+            <form action="homepage.php" method="post">
                 <div class="body bg-gray">
                     <div class="form-group">
-                        <input type="text" name="name" class="form-control" placeholder="Full name"/>
+                        <input type="text" id = "name" name="name" class="form-control" placeholder="Full name"/>
                     </div>
+                    <!--<div class="form-group">
+                        <input type="text" id = "userid" name="userid" class="form-control" placeholder="User ID"/>
+                    </div>-->
                     <div class="form-group">
-                        <input type="text" name="userid" class="form-control" placeholder="User ID"/>
+                        <input type="email" name="email" class="form-control" placeholder="E-mail id"/>
                     </div>
                     <div class="form-group">
                         <input type="password" name="password" class="form-control" placeholder="Password"/>
@@ -37,7 +40,12 @@
                         <input type="password" name="password2" class="form-control" placeholder="Retype password"/>
                     </div>
                     <div class="form-group">
-                        <input type="email" name="email" class="form-control" placeholder="E-mail id"/>
+                        <label for="bio">Biography:</label>
+                        <textarea id="bio" name="user_bio" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">Profile Picture:</label>
+                        <input type="file" name="fileToUpload" id="fileToUpload" />
                     </div>
                     
                 <div class="footer">                    
