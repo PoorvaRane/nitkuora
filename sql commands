@@ -33,3 +33,18 @@ ALTER TABLE `topic_question` ADD CONSTRAINT `tqfkey1` FOREIGN KEY ( `topic_id` )
 ALTER TABLE `topic_question` ADD CONSTRAINT `tqfkey2` FOREIGN KEY ( `question_id` ) REFERENCES `nitkuora`.`question` (
 `question_id`
 ) ON DELETE RESTRICT ON UPDATE RESTRICT ;
+
+ALTER TABLE `question` CHANGE `timestamp` `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+ALTER TABLE `answer` CHANGE `timestamp` `timestamp` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+
+ALTER TABLE `topic` CHANGE `topic` `topic` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+INSERT INTO `nitkuora`.`topic` (`topic_id`, `topic`, `no_followers`, `no_questions`) VALUES ('1', 'Science and Technology', '0', '0');
+INSERT INTO `nitkuora`.`topic` (`topic_id`, `topic`, `no_followers`, `no_questions`) VALUES ('2', 'Philosophy', '0', '0');
+INSERT INTO `topic` ( `topic_id` , `topic` , `no_followers` , `no_questions` ) VALUES ('3', 'Animals', '0', '0');
+
+ALTER TABLE `topic` CHANGE `topicname` `topic_name` VARCHAR( 30 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `question` CHANGE `question` `question_name` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `answer` CHANGE `answer` `answer_name` VARCHAR( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
