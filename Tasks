@@ -5,6 +5,10 @@ Make log in sign up work.
 check whether user is signed in and post question.
 
 
+
+
+sudo gedit /etc/php5/apache2/php.ini
+
 <?php
 $servername = "localhost";
 $username = "root";
@@ -31,3 +35,7 @@ if ($result->num_rows > 0) {
 }
 $conn->close();
 ?> 
+
+
+TASKS:
+-Check if password typed is same as retyped password

@@ -48,3 +48,5 @@ ALTER TABLE `topic` CHANGE `topicname` `topic_name` VARCHAR( 30 ) CHARACTER SET 
 ALTER TABLE `question` CHANGE `question` `question_name` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
 
 ALTER TABLE `answer` CHANGE `answer` `answer_name` VARCHAR( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `user` CHANGE `no_followers` `no_followers` INT( 5 ) NOT NULL DEFAULT '0';
