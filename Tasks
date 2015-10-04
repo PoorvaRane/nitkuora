@@ -5,29 +5,11 @@ Make log in sign up work.
 check whether user is signed in and post question.
 
 
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "password";
-$dbname = "nitkuora";
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
-$sql = "SELECT topic_name FROM topic";
-$result = $conn->query($sql);
+sudo gedit /etc/php5/apache2/php.ini
 
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo $row["topic_name"];
-    }
-} else {
-    echo "0 results";
-}
-$conn->close();
-?> 
+
+TASKS:
+-Check if password typed is same as retyped password
+-Form handling i.e make sure all values are entered except picture.
