@@ -11,9 +11,4 @@ sudo gedit /etc/php5/apache2/php.ini
 
 
 TASKS:
-<<<<<<< HEAD
--Check if password typed is same as retyped password
 -Form handling i.e make sure all values are entered except picture.
-=======
--Store picture.
->>>>>>> 327e2008c68df44c561d220326df4e09b2173d40

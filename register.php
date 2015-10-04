@@ -50,30 +50,30 @@
                     </div>
                     <div class="form-group">
                         <label>Select the topics that you want to follow:</label><br>
-							<?php
-								$servername = "localhost";
-								$username = "root";
-								$password = "password";
-								$dbname = "nitkuora";
+                            <?php
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "password";
+                                $dbname = "nitkuora";
 
-								// Create connection
-								$conn = new mysqli($servername, $username, $password, $dbname);
-								// Check connection
-								if ($conn->connect_error) {
-									die("Connection failed: " . $conn->connect_error);
-								}
+                                // Create connection
+                                $conn = new mysqli($servername, $username, $password, $dbname);
+                                // Check connection
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
 
-								$sql = "SELECT topic_name FROM topic";
-								$result = $conn->query($sql);
+                                $sql = "SELECT topic_name FROM topic";
+                                $result = $conn->query($sql);
 
-								if ($result->num_rows > 0) {
-									// output data of each row
-									while($row = $result->fetch_assoc()) {
-										echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
-									}
-								} 
-								$conn->close();
-							?> 
+                                if ($result->num_rows > 0) {
+                                    // output data of each row
+                                    while($row = $result->fetch_assoc()) {
+                                        echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
+                                    }
+                                } 
+                                $conn->close();
+                            ?> 
                     </div>
                     
                 <div class="footer">                    
