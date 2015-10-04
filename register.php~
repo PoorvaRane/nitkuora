@@ -22,14 +22,16 @@
 
         <div class="form-box" id="login-box">
             <div class="header">Sign Up</div>
-            <form action="register.php" method="post">
+            <form action="activity-signup.php" method="post">
                 <div class="body bg-gray">
                     <div class="form-group">
                         <input type="text" id = "name" name="name" class="form-control" placeholder="Full name"/>
                     </div>
-                    <!--<div class="form-group">
-                        <input type="text" id = "userid" name="userid" class="form-control" placeholder="User ID"/>
-                    </div>-->
+
+                    <div class="form-group">
+                        <input type="text" id = "user_id" name="user_id" class="form-control" placeholder="User ID"/>
+                    </div>
+
                     <div class="form-group">
                         <input type="email" name="email" class="form-control" placeholder="E-mail id"/>
                     </div>
@@ -41,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <label for="bio">About Me:</label>
-                        <textarea id="bio" name="user_bio" class="form-control"></textarea>
+                        <textarea id="user_bio" name="user_bio" class="form-control"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="bio">Profile Picture:</label>
@@ -49,6 +51,7 @@
                     </div>
                     <div class="form-group">
                         <label>Select the topics that you want to follow:</label><br>
+<<<<<<< HEAD
 							<?php
 								$servername = "localhost";
 								$username = "root";
@@ -68,21 +71,51 @@
 								if ($result->num_rows > 0) {
 									// output data of each row
 									while($row = $result->fetch_assoc()) {
-										echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='user_interest'>".$row["topic_name"]."<br>";
+										echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
 									}
 								} else {
 									echo "0 results";
 								}
 								$conn->close();
 							?> 
-                            <input type="checkbox" id="development" value="interest_development" name="user_interest">Development<br>
-                            <input type="checkbox" id="design" value="interest_design" name="user_interest">Design<br>
-                            <input type="checkbox" id="business" value="interest_business" name="user_interest">Business
+                    </div>
+                    
+                <div class="footer">                   
+
+                    <button type="submit" class="btn bg-blue btn-block" name="submit">Sign me up</button>
+=======
+                            <?php
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "password";
+                                $dbname = "nitkuora";
+
+                                // Create connection
+                                $conn = new mysqli($servername, $username, $password, $dbname);
+                                // Check connection
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
+
+                                $sql = "SELECT topic_name FROM topic";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows > 0) {
+                                    // output data of each row
+                                    while($row = $result->fetch_assoc()) {
+                                        echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='user_interest'>".$row["topic_name"]."<br>";
+                                    }
+                                } else {
+                                    echo "0 results";
+                                }
+                                $conn->close();
+                            ?> 
                     </div>
                     
                 <div class="footer">                    
 
                     <button type="submit" class="btn bg-blue btn-block">Sign me up</button>
+>>>>>>> 28bd7145176f23b19b0c2b8823d6c7c3b09c3175
 
                     <a href="login.html" class="text-center">I already have an account</a>
                 </div>
@@ -101,4 +134,7 @@
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 28bd7145176f23b19b0c2b8823d6c7c3b09c3175

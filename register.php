@@ -27,9 +27,11 @@
                     <div class="form-group">
                         <input type="text" id = "name" name="name" class="form-control" placeholder="Full name"/>
                     </div>
+
                     <div class="form-group">
                         <input type="text" id = "user_id" name="user_id" class="form-control" placeholder="User ID"/>
                     </div>
+
                     <div class="form-group">
                         <input type="email" name="email" class="form-control" placeholder="E-mail id"/>
                     </div>
@@ -49,6 +51,7 @@
                     </div>
                     <div class="form-group">
                         <label>Select the topics that you want to follow:</label><br>
+<<<<<<< HEAD
 							<?php
 								$servername = "localhost";
 								$username = "root";
@@ -95,7 +98,4 @@
 
     </body>
 </html>
-
-
-
 
