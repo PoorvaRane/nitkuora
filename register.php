@@ -50,6 +50,7 @@
                     </div>
                     <div class="form-group">
                         <label>Select the topics that you want to follow:</label><br>
+
 							<?php
 								$servername = "localhost";
 								$username = "root";
@@ -72,11 +73,12 @@
 										echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
 									}
 								} 
+
 								$conn->close();
 							?> 
                     </div>
-                    
                 <div class="footer">                    
+
 
                     <button type="submit" class="btn bg-blue btn-block" name="submit">Sign me up</button>
 
@@ -90,6 +92,7 @@
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <!-- Bootstrap -->
+        
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
 
         <script type="text/javascript">
@@ -114,6 +117,9 @@
     </body>
 </html>
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 3b4d6d977766fe7eef0c7aba22b437f38a8c7066

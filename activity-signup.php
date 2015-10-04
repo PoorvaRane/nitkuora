@@ -17,7 +17,6 @@
 
 		if(isset($_POST['submit']))
 		{
-			
 			$fullname = $_POST['name'];
 			$user_id = $_POST['user_id'];
 			$email = $_POST['email'];
@@ -46,7 +45,6 @@
 					echo "YOUR REGISTRATION IS SUCCESSFUL";
 				}
 			}
-
 		}
 		
 
