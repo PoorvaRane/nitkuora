@@ -48,3 +48,12 @@ ALTER TABLE `topic` CHANGE `topicname` `topic_name` VARCHAR( 30 ) CHARACTER SET 
 ALTER TABLE `question` CHANGE `question` `question_name` VARCHAR( 100 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
 
 ALTER TABLE `answer` CHANGE `answer` `answer_name` VARCHAR( 250 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL ;
+
+ALTER TABLE `user` CHANGE `no_followers` `no_followers` INT( 5 ) NOT NULL DEFAULT '0';
+
+ALTER TABLE `answer` CHANGE `answer_id` `answer_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `comment` CHANGE `comment_id` `comment_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `downvote` CHANGE `downvote_id` `downvote_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `question` CHANGE `question_id` `question_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `topic` CHANGE `topic_id` `topic_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+ALTER TABLE `upvote` CHANGE `upvote_id` `upvote_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
