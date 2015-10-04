@@ -74,10 +74,7 @@
 									echo "0 results";
 								}
 								$conn->close();
-							?> 
-                            <input type="checkbox" id="development" value="interest_development" name="user_interest">Development<br>
-                            <input type="checkbox" id="design" value="interest_design" name="user_interest">Design<br>
-                            <input type="checkbox" id="business" value="interest_business" name="user_interest">Business
+							?>
                     </div>
                     
                 <div class="footer">                    

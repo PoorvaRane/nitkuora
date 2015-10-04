@@ -11,4 +11,4 @@ sudo gedit /etc/php5/apache2/php.ini
 
 
 TASKS:
--Store picture.
+-Form handling i.e make sure all values are entered except picture.
