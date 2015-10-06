@@ -108,7 +108,7 @@
                     <!-- /.search form -->
                         </li>
                         <li>
-                        <a href="write.html">
+                        <a href="write.php">
                         <i class="fa fa-pencil"></i>
                         </a>
                         </li>
@@ -182,7 +182,7 @@
                                         <a href="index.html" class="btn btn-default btn-flat">Home</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="pages/example/login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -252,8 +252,7 @@
                     
                 </section>
                 <section class="content">
-
-                 </section>
+                </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 

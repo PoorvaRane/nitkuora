@@ -57,3 +57,5 @@ ALTER TABLE `downvote` CHANGE `downvote_id` `downvote_id` INT( 10 ) NOT NULL AUT
 ALTER TABLE `question` CHANGE `question_id` `question_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
 ALTER TABLE `topic` CHANGE `topic_id` `topic_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
 ALTER TABLE `upvote` CHANGE `upvote_id` `upvote_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `question` CHANGE `no_answers` `no_answers` INT( 5 ) NOT NULL DEFAULT '0';

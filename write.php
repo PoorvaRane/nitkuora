@@ -1,8 +1,50 @@
+<?php
+    session_start();
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "password";
+    $dbname = "nitkuora";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    if(!isset($_SESSION['user']))
+    {
+        header("Location: index.php");
+    }
+
+    $user_id = $_SESSION['user'];
+
+    $sql1 = "SELECT * FROM user where user_id = '$user_id'";
+    $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+    $result1 = $conn->query($sql1);
+    $result2 = $conn->query($sql2);
+    if($result1->num_rows > 0){
+        $user_info = $result1->fetch_assoc();
+        if($result2->num_rows > 0){
+            $topic_list = array();
+            while($row = $result2->fetch_assoc()) {
+                array_push($topic_list, $row);
+            }
+        }
+    } else {
+        header("Location: login.html");
+        ?>
+        <script type="text/javascript">alert('Please login');</script>
+        <?php
+    }
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>NITKuora</title>
+        <title>NITKuora| Write</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
         <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -114,15 +156,18 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span>Jane Doe <i class="caret"></i></span>
+                                <span><?php echo $user_info['name']; ?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                     <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                                     <p>
-                                        Jane Doe - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                        <?php
+                                            echo $user_info['name']; 
+                                            echo "<br>";
+                                            echo $user_info['bio'];
+                                        ?>
                                     </p>
                                 </li>
 
@@ -152,36 +197,27 @@
                             <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
-                            <p>Hello, Jane</p>
+                            <p>Hello, <?php echo $user_info['user_id']; ?></p>
                         </div>
-
                     </div>
-                    <div>
+                   
+                                       <div>
                        <b> Topics Following </b>  
                         <span> <i class="fa fa-arrow-circle-o-right"></i></span>             
                     </div>
                     <div>
                         <ul style="list-style-type: none">
 
-                            <li> 
-                                <a href="topic.html"> Topic One</a>
-                            </li>
-                            <li>
-                                 <a href="topic.html"> Topic Two</a>
-                            </li>
-                            <li> 
-                                <a href="topic.html"> Topic Three</a>
-                            </li>
-                            <li>
-                                 <a href="topic.html"> Topic Four</a>
-                            </li>
-                            <li> 
-                                <a href="topic.html"> Topic Five</a>
-                            </li>
-                        </ul>
+                           <?php
+                                foreach ($topic_list as $topic) {
+                                    echo var_dump($topic["topic_name"]);
+                                    echo "<br>";
+                                    echo "<li>";
+                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "</li>";
+                                }
+                            ?>
                     </div>
-                   
-                   
                 </section>
                 <!-- /.sidebar -->
             </aside>
@@ -189,28 +225,34 @@
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">
                <!-- Main content -->
-                <section class="content-header">
-                <img-circle>
+               <section class="content-header">
+                    <form action="post-question.php" method="post">
+                        <label for="question">Post your question here:</label>
+                        <textarea id="question" name="question" class="form-control" required ></textarea>
 
-                </img-circle>
-                    <h1>
-                        Topic Name
-                       
-                    </h1>
-                    <p>
-                    Go on blabbing about description here 
-                    </p>
-                    
-                </section>
+                    <?php
+                        $sql = "SELECT topic_name FROM topic";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
+                            }
+                        } 
+                    ?>
+                    </br>
+                    <button type="submit" id="submit" class="btn bg-blue btn-block" name="submit"  style="width:100px; height:35px" >Post</button>
+                    </form>
+               </section>
+                
                 <section class="content">
 
-                 </section>
+                </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 
     
-
-
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
         <!-- jQuery UI 1.10.3 -->
@@ -244,6 +286,31 @@
         
         <!-- AdminLTE for demo purposes -->
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            var checkboxes = $("input[type='checkbox']");
+            console.log(checkboxes);
+            var submitButt = document.getElementById("submit");
+
+            if($("input:checkbox:checked").length==0){
+                    console.log("if");
+                    submitButt.disabled = true;
+            } else {
+                console.log("else");
+                submitButt.disabled = false;
+            }
+
+            checkboxes.click(function() {
+                console.log("click");
+                if($("input:checkbox:checked").length==0){
+                    submitButt.disabled = true;
+                } else {
+                    submitButt.disabled = false;
+                }
+            });
+
+            
+        </script>
 
     </body>
 </html>
