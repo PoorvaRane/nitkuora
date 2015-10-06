@@ -1,7 +1,6 @@
 <?php
-
     session_start();
-    
+
     $servername = "localhost";
     $username = "root";
     $password = "password";
@@ -9,27 +8,20 @@
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
-    //Check connection
+    // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    echo "done";
 
-    $topic_name = $_GET['topic_name']; 
+    if(!isset($_SESSION['user']))
+    {
+        header("Location: index.php");
+    }
+
     $user_id = $_SESSION['user'];
 
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
-    $sql = "SELECT * FROM topic where topic_name = '$topic_name'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
-
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-        $topic= $result->fetch_assoc();  
-        echo "var_dump <br>";
-        var_dump($topic);
-    } 
-
     $result1 = $conn->query($sql1);
     $result2 = $conn->query($sql2);
     if($result1->num_rows > 0){
@@ -40,15 +32,20 @@
                 array_push($topic_list, $row);
             }
         }
+    } else {
+        header("Location: login.html");
+        ?>
+        <script type="text/javascript">alert('Please login');</script>
+        <?php
     }
-?> 
+?>
 
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>NITKuora | <?php echo $row["topic_name"]; ?></title>
+        <title>NITKuora| Home</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
         <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -97,14 +94,14 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-                            <form action="#" method="get" class="sidebar-form">
-                                <div class="input-group">
-                                    <input type="text" name="q" class="form-control" placeholder="Search..."/>
-                                    <span class="input-group-btn">
-                                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                                    </span>
-                                </div>
-                            </form>
+		                    <form action="#" method="get" class="sidebar-form">
+		                        <div class="input-group">
+		                            <input type="text" name="q" class="form-control" placeholder="Search..."/>
+		                            <span class="input-group-btn">
+		                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+		                            </span>
+		                        </div>
+		                    </form>
                     <!-- /.search form -->
                         </li>
                         <li>
@@ -172,17 +169,17 @@
                                             echo "<br>";
                                             echo $user_info['bio'];
                                         ?>
-                                        <!-- <small>Member since Nov. 2012</small> -->
+<!--                                         <small>Member since Nov. 2012</small> -->
                                     </p>
                                 </li>
 
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="index.html" class="btn btn-default btn-flat">Home</a>
+                                        <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="pages/example/login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="login.html" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -202,11 +199,10 @@
                             <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
-                            <p>Hello, <?php echo $user_info['user_id']; ?> </p>
+                            <p>Hello, <?php echo $user_info['user_id']; ?></p>
                         </div>
-
                     </div>
-                    <div>
+                   <div>
                        <b> Topics Following </b>  
                         <span> <i class="fa fa-arrow-circle-o-right"></i></span>             
                     </div>
@@ -214,17 +210,16 @@
                         <ul style="list-style-type: none">
 
                             <?php
-                                foreach ($topic_list as $topicName) {
-                                    //echo var_dump($topic["topic_name"]);
+                                foreach ($topic_list as $topic) {
+                                    echo var_dump($topic["topic_name"]);
+                                    echo "<br>";
                                     echo "<li>";
-                                    echo "<a href='topic.php'>".$topicName["topic_name"]."</a>";
+                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
                                     echo "</li>";
-                                    $_SESSION['current_topic'] = $topicName["topic_name"];
                                 }
                             ?>
                         </ul>
                     </div>
-                   
                    
                 </section>
                 <!-- /.sidebar -->
@@ -233,24 +228,6 @@
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">
                <!-- Main content -->
-                <section class="content-header">
-                <img-circle>
-
-                </img-circle>
-                    <h1>
-                        <?php echo $topic["topic_name"]; ?>
-                       
-                    </h1>
-                    <br>
-                    <p>
-                        <?php echo $topic["topic_description"]; 
-                            echo "<br>";
-                            echo var_dump($topic);
-                        ?> 
-
-                    </p>
-                    
-                </section>
                 <section class="content">
 
                  </section>
@@ -293,6 +270,21 @@
         
         <!-- AdminLTE for demo purposes -->
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            // var link = document.getElementsByTagName("a");
+
+            // link.addEventListener('click', function() { 
+
+            //     window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            // });
+
+            function markActiveLink(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+
+        </script>
 
         <?php
             $conn->close();
