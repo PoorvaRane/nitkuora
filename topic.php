@@ -21,6 +21,7 @@
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
     $sql = "SELECT * FROM topic where topic_name = '$topic_name'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+    $sql3 = "SELECT * FROM question WHERE to be continued";
 
     $result = $conn->query($sql);
 
@@ -252,6 +253,11 @@
                     
                 </section>
                 <section class="content">
+
+                <?php
+
+                ?>
+
                 </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
