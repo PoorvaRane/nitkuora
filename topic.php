@@ -21,7 +21,7 @@
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
     $sql = "SELECT * FROM topic where topic_name = '$topic_name'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
-    $sql3 = "SELECT * FROM question WHERE to be continued";
+    $sql3 = "SELECT * FROM question WHERE question_id IN (SELECT question_id from topic_question WHERE topic_id IN (SELECT topic_id from topic WHERE topic_name = '$topic_name'))";
 
     $result = $conn->query($sql);
 
@@ -33,6 +33,8 @@
 
     $result1 = $conn->query($sql1);
     $result2 = $conn->query($sql2);
+    $result3 = $conn->query($sql3);
+
     if($result1->num_rows > 0){
         $user_info = $result1->fetch_assoc();
         if($result2->num_rows > 0){
@@ -246,7 +248,6 @@
                     <p>
                         <?php echo $topic["topic_description"]; 
                             echo "<br>";
-                            echo var_dump($topic);
                         ?> 
 
                     </p>
@@ -255,7 +256,12 @@
                 <section class="content">
 
                 <?php
-
+                    if ($result3->num_rows > 0) {
+                        // output data of each row
+                        while($row = $result3->fetch_assoc()) {
+                            echo "<div>".$row["question_name"]."</div>";
+                        }
+                    }
                 ?>
 
                 </section>
