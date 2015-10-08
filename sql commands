@@ -59,3 +59,7 @@ ALTER TABLE `topic` CHANGE `topic_id` `topic_id` INT( 10 ) NOT NULL AUTO_INCREME
 ALTER TABLE `upvote` CHANGE `upvote_id` `upvote_id` INT( 10 ) NOT NULL AUTO_INCREMENT ;
 
 ALTER TABLE `question` CHANGE `no_answers` `no_answers` INT( 5 ) NOT NULL DEFAULT '0';
+
+ALTER TABLE `question` ADD UNIQUE (
+`question_name`
+);
