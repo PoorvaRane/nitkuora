@@ -209,11 +209,11 @@
                         <ul style="list-style-type: none">
 
                            <?php
-                                foreach ($topic_list as $topic) {
-                                    echo var_dump($topic["topic_name"]);
+                                foreach ($topic_list as $topicName) {
+                                    echo var_dump($topicName["topic_name"]);
                                     echo "<br>";
                                     echo "<li>";
-                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a href='topic.php' id = '".$topicName["topic_name"]."'' onclick='markActiveLink(this);'>".$topicName["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
@@ -309,6 +309,10 @@
                 }
             });
 
+            function markActiveLink(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
             
         </script>
 

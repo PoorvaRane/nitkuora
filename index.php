@@ -268,12 +268,6 @@
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
 
         <script type="text/javascript">
-            // var link = document.getElementsByTagName("a");
-
-            // link.addEventListener('click', function() { 
-
-            //     window.location.href = "topic.php?topic_name=" + javascriptVariable; 
-            // });
 
             function markActiveLink(el) {   
                 var javascriptVariable =  $(el).attr("id");

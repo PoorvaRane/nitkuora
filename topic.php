@@ -218,11 +218,11 @@
 
                             <?php
                                 foreach ($topic_list as $topicName) {
-                                    //echo var_dump($topic["topic_name"]);
+                                    echo var_dump($topicName["topic_name"]);
+                                    echo "<br>";
                                     echo "<li>";
-                                    echo "<a href='topic.php'>".$topicName["topic_name"]."</a>";
+                                    echo "<a href='topic.php' id = '".$topicName["topic_name"]."'' onclick='markActiveLink(this);'>".$topicName["topic_name"]."</a>";
                                     echo "</li>";
-                                    $_SESSION['current_topic'] = $topicName["topic_name"];
                                 }
                             ?>
                         </ul>
@@ -304,6 +304,15 @@
         
         <!-- AdminLTE for demo purposes -->
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            function markActiveLink(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+        </script>
+
+
 
         <?php
             $conn->close();
