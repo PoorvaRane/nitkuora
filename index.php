@@ -13,10 +13,6 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    if(!isset($_SESSION['user']))
-    {
-        header("Location: index.php");
-    }
 
     $user_id = $_SESSION['user'];
 
