@@ -177,7 +177,7 @@
                                         <a href="index.html" class="btn btn-default btn-flat">Home</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="pages/example/login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
