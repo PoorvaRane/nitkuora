@@ -13,7 +13,6 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    echo "done";
 
     $topic_name = $_GET['topic_name']; 
     $user_id = $_SESSION['user'];
@@ -27,8 +26,6 @@
 
     if ($result->num_rows > 0) {
         $topic= $result->fetch_assoc();  
-        echo "var_dump <br>";
-        var_dump($topic);
     } 
 
     $result1 = $conn->query($sql1);
@@ -218,8 +215,6 @@
 
                             <?php
                                 foreach ($topic_list as $topicName) {
-                                    echo var_dump($topicName["topic_name"]);
-                                    echo "<br>";
                                     echo "<li>";
                                     echo "<a href='topic.php' id = '".$topicName["topic_name"]."'' onclick='markActiveLink(this);'>".$topicName["topic_name"]."</a>";
                                     echo "</li>";
