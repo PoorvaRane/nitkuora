@@ -72,7 +72,7 @@
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
                 NITKuora
             </a>
@@ -90,7 +90,7 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-		                    <form action="#" method="get" class="sidebar-form">
+		                    <form action="activity-search.php" method="get" class="sidebar-form">
 		                        <div class="input-group">
 		                            <input type="text" name="q" class="form-control" placeholder="Search"/>
 		                            <span class="input-group-btn">
