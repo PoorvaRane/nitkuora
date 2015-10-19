@@ -253,8 +253,17 @@
                 <?php
                     if ($result3->num_rows > 0) {
                         // output data of each row
+                        echo '<ul style =" list-style-type: none ">';
                         while($row = $result3->fetch_assoc()) {
-                            echo "<div>".$row["question_name"]."</div>";
+                            echo '<br><li >
+                            <div class="col-sm-10">
+                            <b>'.$row["question_name"].'</b></div>
+                            <div class="col-sm-2"><a class="btn btn-success" name="answer" href="answer.php" onclick="sendQuestion(this);" id="'.$row["question_name"].'">Answer</a>
+                            </div>
+                            <div class="col-sm-10"> this is the answer </div>
+                        </li>
+                        <br>
+                        <hr>';
                         }
                     }
                 ?>
@@ -304,6 +313,11 @@
             function markActiveLink(el) {   
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+
+            function sendQuestion(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "answer.php?question=" + javascriptVariable; 
             }
         </script>
 

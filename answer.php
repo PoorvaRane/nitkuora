@@ -1,3 +1,43 @@
+<?php
+    session_start();
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "password";
+    $dbname = "nitkuora";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $current_question = $_GET['question']; 
+
+    $user_id = $_SESSION['user'];
+
+    $sql1 = "SELECT * FROM user where user_id = '$user_id'";
+    $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+    $result1 = $conn->query($sql1);
+    $result2 = $conn->query($sql2);
+    if($result1->num_rows > 0){
+        $user_info = $result1->fetch_assoc();
+        if($result2->num_rows > 0){
+            $topic_list = array();
+            while($row = $result2->fetch_assoc()) {
+                array_push($topic_list, $row);
+            }
+        }
+    } else {
+        header("Location: login.html");
+        ?>
+        <script type="text/javascript">alert('Please login');</script>
+        <?php
+    }
+?>
+
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -114,15 +154,18 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span>Jane Doe <i class="caret"></i></span>
+                                <span><?php echo $user_info['name']; ?> <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                     <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                                     <p>
-                                        Jane Doe - Web Developer
-                                        <small>Member since Nov. 2012</small>
+                                       <?php
+                                            echo $user_info['name']; 
+                                            echo "<br>";
+                                            echo $user_info['bio'];
+                                        ?>
                                     </p>
                                 </li>
 
@@ -163,21 +206,13 @@
                     <div>
                         <ul style="list-style-type: none">
 
-                            <li> 
-                                <a href="topic.html"> Topic One</a>
-                            </li>
-                            <li>
-                                 <a href="topic.html"> Topic Two</a>
-                            </li>
-                            <li> 
-                                <a href="topic.html"> Topic Three</a>
-                            </li>
-                            <li>
-                                 <a href="topic.html"> Topic Four</a>
-                            </li>
-                            <li> 
-                                <a href="topic.html"> Topic Five</a>
-                            </li>
+                            <?php
+                                foreach ($topic_list as $topic) {
+                                    echo "<li>";
+                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "</li>";
+                                }
+                            ?>
                         </ul>
                     </div>
                    
@@ -187,47 +222,50 @@
             </aside>
 
             <!-- Right side column. Contains the navbar and content of the page -->
-            <aside class="right-side">
+                       <aside class="right-side">
                <!-- Main content -->
                 <section class="content-header">
                 <img-circle>
 
                 </img-circle>
                     <h1>
-                        Topic Name
+                        <?php
+                            echo $current_question;
+                        ?>
                        
                     </h1>
-                    <p>
-                    Go on blabbing about description here 
-                    </p>
+                   
                 </br>
                
                     <div class ="row">
+                        <h4> 
+                           Write Answer:
+                       </h4>
+
+                        <div class="col-sm-12"> <textarea class="col-sm-12" rows=10></textarea> </div>
+                        <div class="col-sm-10"></div>
+                        <div class="col-sm-2"><button name="answer" class="btn btn-success" onclick="location.href='/home/dell/Downloads/nitkuora-master/answer.html'">Post Answer</button></div>
+                            <br/>
+                        <h4>
+                            Previous Answers:
+                        </h4>
                         <ul class="name wha you want Poorva" style =" list-style-type: none ">
                         <li >
-                            <div class="col-sm-10">
-                            <b>question 1  </b></div>
-                            <div class="col-sm-2"><button class="btn btn-success" name="answer" onclick="location.href='/home/dell/Downloads/nitkuora-master/answer.html'">Answer</button>
-                            </div>
-                            <div class="col-sm-10"> this is the answer </div>
+                            <div class="col-sm-12">
+                            <b>Answer 1  </b></div>
                         </li>
-                        <hr>
-                        <li >
-                            <div class="col-sm-10">
-                            <b>question 2  </b></div>
-                            <div class="col-sm-2"><button name="answer" class="btn btn-success" onclick="location.href='/home/dell/Downloads/nitkuora-master/answer.html'">Answer</button>
-                            </div>
-                            <div class="col-sm-10"> this is the answer </div>
+                         <hr>
+                         <li >
+                            <div class="col-sm-12">
+                            <b>Answer 2  </b></div>
                         </li>
-                        <hr>
-                        <li >
-                            <div class="col-sm-10">
-                            <b>question 3  </b></div>
-                            <div class="col-sm-2"><button name="answer" class="btn btn-success" onclick="location.href='/home/dell/Downloads/nitkuora-master/answer.html'">Answer</button>
-                            </div>
-                            <div class="col-sm-10"> this is the answer </div>
+                         <hr>
+                         <li >
+                            <div class="col-sm-12">
+                            <b>Answer 3  </b></div>
                         </li>
-                        <hr>
+                         <hr>
+                       
                         </ul>
                     </div>
                     
@@ -277,3 +315,7 @@
 
     </body>
 </html>
+
+
+
+
