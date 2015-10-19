@@ -255,15 +255,15 @@
                         // output data of each row
                         echo '<ul style =" list-style-type: none ">';
                         while($row = $result3->fetch_assoc()) {
-                            echo '<br><li >
+                            echo '<br><div class="row"><li >
                             <div class="col-sm-10">
                             <b>'.$row["question_name"].'</b></div>
                             <div class="col-sm-2"><a class="btn btn-success" name="answer" href="answer.php" onclick="sendQuestion(this);" id="'.$row["question_name"].'">Answer</a>
                             </div>
                             <div class="col-sm-10"> this is the answer </div>
-                        </li>
-                        <br>
-                        <hr>';
+                        </li></div>
+                        <br>';
+                        echo "<hr>";
                         }
                     }
                 ?>
