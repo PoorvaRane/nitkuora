@@ -86,3 +86,13 @@ CREATE TRIGGER t_no_followers
     SET no_followers = no_followers + 1 WHERE topic_id = NEW.topic_id ; 
 END$$
 DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER t_no_answers 
+    AFTER INSERT ON answer
+    FOR EACH ROW BEGIN
+ 
+    UPDATE question
+    SET no_answers = no_answers + 1 WHERE question_id = NEW.a_question_id ; 
+END$$
+DELIMITER ;

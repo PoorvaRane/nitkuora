@@ -14,6 +14,7 @@
     }
 
     $current_question = $_GET['question']; 
+    $_SESSION['current_question'] = $current_question;
 
     $user_id = $_SESSION['user'];
 
@@ -241,10 +242,12 @@
                         <h4> 
                            Write Answer:
                        </h4>
-
-                        <div class="col-sm-12"> <textarea class="col-sm-12" rows=10></textarea> </div>
-                        <div class="col-sm-10"></div>
-                        <div class="col-sm-2"><button name="answer" class="btn btn-success" onclick="location.href='/home/dell/Downloads/nitkuora-master/answer.html'">Post Answer</button></div>
+                        <form action="write-answer.php" method="post">
+                        <textarea name="answer" id="answer" class="form-control" cols="145" rows=10></textarea>
+                        <br />
+                        <br>
+                        <button name="submit" id="submit" class="btn btn-success">Post Answer</button></div>
+                        </form>
                             <br/>
                         <h4>
                             Previous Answers:
