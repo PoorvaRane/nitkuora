@@ -208,7 +208,7 @@
                             <?php
                                 foreach ($topic_list as $topic) {
                                     echo "<li>";
-                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
