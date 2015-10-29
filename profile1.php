@@ -13,13 +13,46 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-
+     $username = $_GET['username']; 
     $user_id = $_SESSION['user'];
 
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+    $sql3 = "SELECT * FROM user where user_id = '$username'";
+    $sql4 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$username')";
+    $sql5 = "SELECT * FROM follower_following where user1_id = '$username'";
+    $sql6 = "SELECT * FROM follower_following where user2_id = '$user_id'";
     $result1 = $conn->query($sql1);
     $result2 = $conn->query($sql2);
+    $result3 = $conn->query($sql3);
+    $result4 = $conn->query($sql4);
+    $result5 = $conn->query($sql5);
+    $result6 = $conn->query($sql6);
+    if($result3->num_rows > 0){
+            $newuser_info = $result3->fetch_assoc();
+            
+        }
+    if($result4->num_rows > 0){
+            $newtopic_list = array();
+            while($row1 = $result4->fetch_assoc()) {
+                array_push($newtopic_list, $row1);
+            }
+        }
+         if($result5->num_rows > 0){
+            $newfollowers_list = array();
+            while($newfollowers = $result5->fetch_assoc()) {
+                array_push($newfollowers_list, $newfollowers);
+            }
+        }
+        if($result6->num_rows > 0){
+            $newfollowing_list = array();
+            while($newfollowing = $result6->fetch_assoc()) {
+                array_push($newfollowing_list, $newfollowing);
+            }
+        }
+
+
+
     if($result1->num_rows > 0){
         $user_info = $result1->fetch_assoc();
         if($result2->num_rows > 0){
@@ -275,73 +308,23 @@
             <aside class="right-side">
                <!-- Main content -->
                 <section class="content">
+                     <img-circle>
 
-                 <?php
+                </img-circle>
+                    <h1>
+                        <?php echo $newuser_info["name"]; 
+                        var_dump ;
+                        ?>
+                       
+                    </h1>
+                    <br>
+                    <p>
+                        <?php echo  $newuser_info["bio"]; 
+                            echo "<br>";
+                        ?> 
 
-    $sqlf="select * from audit where user1_id in (select user2_id from follower_following where user1_id='$user_id' ) or user2_id in (select user2_id from follower_following where user1_id='$user_id' )";
-$news=$conn->query($sqlf);
-echo "<h2 align='center' >NewsFeed</h2>";
-?>
-
-<ul align="center" style="list-style-type: none">
-<?php
-  if($news->num_rows==0)
-  {
-    echo "<h1>u have no friends.</h1>";
-  }
-
-  if($news->num_rows>0)
-  {
-    echo"<h1>length of results is '$news->num_rows' </h1>";
-    while($ne=$news->fetch_assoc())
-    {
-     $user1=$ne["user1_id"];
-     $user2=$ne["user2_id"];
-     $q_id=$ne["question_id"];
-     $a_id=$ne["answer_id"];
-     $t_id=$ne["topic_id"];
-     $c_id=$ne["comment_id"];
-     $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
-     echo "<li>";
-     echo $user1_name["name"];
-     if (! is_null($user2))
-     {
-        $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
-        echo " now follows ".$user2_name["name"];
-     } 
-      if (! is_null($t_id))
-     {
-        $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
-        echo " now follows ".$topic["topic_name"];
-     } 
-     if (! is_null($q_id))
-     {
-        $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
-        echo " posted ".$question["question_name"];
-     } 
-     if (! is_null($a_id))
-     {
-        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
-        echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
-     } 
-     if (! is_null($c_id))
-     {
-        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
-        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
-        echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];
-     } 
-     
-
-     echo "</li>";
-
-
-    }
-  } 
-?>
-</ul>
-                 </section>
+                    </p>
+           </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 

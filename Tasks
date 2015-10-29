@@ -12,3 +12,13 @@ sudo gedit /etc/php5/apache2/php.ini
 
 TASKS:
 -Store picture.
+
+
+
+
+ foreach ($followers_list as $follower) {
+                                    echo "<li>";
+                                   
+                                    echo "<a id = '".$follower["user2_id"]."'' onclick='markActiveLink1(this);'>".$follower["user2_id"]."</a>";
+                                    echo "</li>";
+                                }
