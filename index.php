@@ -71,6 +71,8 @@
     </head>
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
+
+
         <header class="header">
             <a href="index.php" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
@@ -90,14 +92,14 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-		                    <form action="activity-search.php" method="get" class="sidebar-form">
-		                        <div class="input-group">
-		                            <input type="text" name="q" class="form-control" placeholder="Search"/>
-		                            <span class="input-group-btn">
-		                                <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-		                            </span>
-		                        </div>
-		                    </form>
+                            <form action="activity-search.php" method="get" class="sidebar-form">
+                                <div class="input-group">
+                                    <input type="text" name="q" class="form-control" placeholder="Search"/>
+                                    <span class="input-group-btn">
+                                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
                     <!-- /.search form -->
                         </li>
                         <li>
@@ -111,44 +113,92 @@
                                 <i class="fa fa-warning"></i>
                                 <span class="label label-warning">10</span>
                             </a>
+                            <?php 
+                           # $notif=$conn->query("select * from audit where user2_id='$user_id' or user1_id in (select a_user_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
+                             $notif=$conn->query("select * from audit where user2_id='$user_id' or answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id = '$user_id')) or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id'))  or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
+                          /* 
+                             while($no=$notif->fetch_assoc())
+                             {
+                                echo "u1: ".$no["user1_id"]." u2 ".$no["user2_id"]." qid ".$no["question_id"]. " aid ".$no["answer_id"]." cid ".$no["comment_id"]."\n";
+                             }
+*/
+                            ?>
                             <ul class="dropdown-menu">
-                                <li class="header">You have 10 notifications</li>
+                                <li class="header">Notifications</li>
+                                
                                 <li>
-                                    <!-- inner menu: contains the actual data -->
-                                    <ul class="menu">
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-people info"></i> 5 new members joined today
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-warning danger"></i> Very long description here that may not fit into the page and may cause design problems
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="fa fa-users warning"></i> 5 new members joined
-                                            </a>
-                                        </li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                <?php
 
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-cart success"></i> 25 sales made
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="ion ion-ios7-person danger"></i> You changed your username
-                                            </a>
-                                        </li>
-                                    </ul>
+                                if($notif->num_rows==0)
+                                {
+                                    echo"<li>";
+                                    echo"<a href='#'>";
+                                    echo "<i class='ion ion-ios7-people info'></i>" ;
+                                    echo "You have none.";
+                                    echo"</a>";
+                                    echo"</li>";
+                                }
+                                if ($notif->num_rows>0)
+                                {
+
+                                   
+                                  while($no=$notif->fetch_assoc())
+                                  { 
+
+                                    $user1=$no["user1_id"];
+                                    $user2=$no["user2_id"];
+                                    $q_id=$no["question_id"];
+                                    $a_id=$no["answer_id"];
+                                    $t_id=$no["topic_id"];
+                                    $c_id=$no["comment_id"];
+                            
+                                    echo"<li>";
+                                    echo"<a href='#'>";
+                                    echo "<i class='ion ion-ios7-people info'></i>" ;
+
+                                    if (! is_null($user2))
+                                     {
+                                        $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+                                        echo $user1_name["name"]." now follows you";
+                                     } 
+                                  
+                                     if (! is_null($a_id))
+                                     {
+                                        
+                                        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
+                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+                                        $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+                                        echo "Your question ".$question["question_name"]." got an answer  ".$answer["answer_name"]." posted by ".$us["name"];
+                                                                              
+                                     }
+                                  
+                                     if (! is_null($c_id))
+                                     {
+                                        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+                                        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+                                        $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+                                        $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+                                        if($check['user_id']==$user_id)
+                                        echo $us["name"]." commented ".$comment["comment_name"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
+                                        else
+                                        echo $us["name"]." commented ".$comment["comment_name"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
+                                     } 
+                                     
+                                    echo"</a>";
+                                    echo"</li>";
+                                  }
+                                  
+                                }
+                                
+                    ?>            
+                                </ul>
                                 </li>
-                                <li class="footer"><a href="#">View all</a></li>
+                                        
                             </ul>
-                        </li>
-                        
-
+                    
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -195,7 +245,7 @@
                             <img src="img/avatar3.png" class="img-circle" alt="User Image" />
                         </div>
                         <div class="pull-left info">
-                            <p>Hello, <?php echo $user_info['user_id']; ?></p>
+                            <p>ahole, <?php echo $user_info['user_id'];  ?></p>
                         </div>
                     </div>
                    <div>
@@ -208,12 +258,14 @@
                             <?php
                                 foreach ($topic_list as $topic) {
                                     echo "<li>";
-                                    echo "<a id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
                         </ul>
                     </div>
+
+                    
                    
                 </section>
                 <!-- /.sidebar -->
@@ -224,12 +276,74 @@
                <!-- Main content -->
                 <section class="content">
 
+                 <?php
+
+    $sqlf="select * from audit where user1_id in (select user2_id from follower_following where user1_id='$user_id' ) or user2_id in (select user2_id from follower_following where user1_id='$user_id' )";
+$news=$conn->query($sqlf);
+echo "<h2 align='center' >NewsFeed</h2>";
+?>
+
+<ul align="center" style="list-style-type: none">
+<?php
+  if($news->num_rows==0)
+  {
+    echo "<h1>u have no friends.</h1>";
+  }
+
+  if($news->num_rows>0)
+  {
+    echo"<h1>length of results is '$news->num_rows' </h1>";
+    while($ne=$news->fetch_assoc())
+    {
+     $user1=$ne["user1_id"];
+     $user2=$ne["user2_id"];
+     $q_id=$ne["question_id"];
+     $a_id=$ne["answer_id"];
+     $t_id=$ne["topic_id"];
+     $c_id=$ne["comment_id"];
+     $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+     echo "<li>";
+     echo $user1_name["name"];
+     if (! is_null($user2))
+     {
+        $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
+        echo " now follows ".$user2_name["name"];
+     } 
+      if (! is_null($t_id))
+     {
+        $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
+        echo " now follows ".$topic["topic_name"];
+     } 
+     if (! is_null($q_id))
+     {
+        $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
+        echo " posted ".$question["question_name"];
+     } 
+     if (! is_null($a_id))
+     {
+        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+        echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
+     } 
+     if (! is_null($c_id))
+     {
+        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+        echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];
+     } 
+     
+
+     echo "</li>";
+
+
+    }
+  } 
+?>
+</ul>
                  </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
-
-    
-
 
         <!-- jQuery 2.0.2 -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
