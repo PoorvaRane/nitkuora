@@ -15,13 +15,12 @@
 
      $username = $_GET['username']; 
     $user_id = $_SESSION['user'];
-
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
     $sql3 = "SELECT * FROM user where user_id = '$username'";
     $sql4 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$username')";
     $sql5 = "SELECT * FROM follower_following where user1_id = '$username'";
-    $sql6 = "SELECT * FROM follower_following where user2_id = '$user_id'";
+    $sql6 = "SELECT * FROM follower_following where user2_id = '$username'";
     $result1 = $conn->query($sql1);
     $result2 = $conn->query($sql2);
     $result3 = $conn->query($sql3);
@@ -242,14 +241,14 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                     <img src="img/avatar3.png" class="img-circle" alt="User Image" />
-                                    <p>
+                                   
                                         <?php
                                             echo $user_info['name']; 
                                             echo "<br>";
                                             echo $user_info['bio'];
                                         ?>
 <!--                                         <small>Member since Nov. 2012</small> -->
-                                    </p>
+
                                 </li>
 
                                 <!-- Menu Footer-->
@@ -311,19 +310,129 @@
                      <img-circle>
 
                 </img-circle>
+                <div class="col-md-8">
                     <h1>
                         <?php echo $newuser_info["name"]; 
-                        var_dump ;
+                        
                         ?>
                        
                     </h1>
-                    <br>
-                    <p>
-                        <?php echo  $newuser_info["bio"]; 
-                            echo "<br>";
-                        ?> 
+                </div>
 
-                    </p>
+                <div class="col-md-2">
+                </div>
+
+                <div class="col-md-2">
+                    <br>
+                    <a class="btn btn-success btn-flat">Follow</a>
+                </div>   
+                <hr>
+                <br>
+                <br>
+                    <?php echo "<div class='col-md-12'> Bio: ".$newuser_info["bio"] ."</div>"; 
+                     echo "<br>";?>
+                     <br />
+                     <row>
+                    <ul style="list-style-type: none">
+                        <div class="col-md-4">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-globe"></i>
+                                <span>Topics Following <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu bg-light-blue">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+                                    <ul style="list-style-type: none">
+                            <?php
+                                echo "<table>";
+                                foreach ($newtopic_list as $newtopic) {
+                                    
+                                    echo "<tr>";
+                                    echo "<td> <a href='topic.php'  style='color:#FFFFFF; text-align:left;' id = '".$newtopic["topic_name"]."'' onclick='markActiveLink(this);'>".$newtopic["topic_name"]."</a> </td>";
+                                    echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">
+                                        <td> <button style="text-align:right;" name ="'.$newtopic["topic_name"].'" class="btn btn-success btn-flat">Follow</button> </td>
+                                        </form>
+                                    ';
+                                    if(isset($_POST[$newtopic["topic_name"]])){
+                                        $temp = $newtopic["topic_name"];
+                                        echo $temp;
+                                    }
+                                    echo "</tr>";
+                                }
+                                    echo "</table>";
+                            ?>
+
+                                    </ul>
+                                    
+                                </li>
+                               
+                            </ul>
+                        </li>
+                    </div>
+                    <div class="col-md-4">
+                         <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <span>Followers <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu bg-light-blue">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+                                    <ul style="list-style-type: none">
+                            <?php
+                                echo "<table>";
+                                foreach ($newfollowers_list as $newfollower) {
+                                    echo "<tr>";
+                                    echo "<td> <a style='color:#FFFFFF; text-align:left;' id = '".$newfollower["user2_id"]."'' onclick='markActiveLink(this);'>".$newfollower["user2_id"]."</a> </td>";
+                                    echo '
+                                        <td> <button style="text-align:right;" name ="'.$newfollower["user2_id"].'" class="btn btn-success btn-flat">Follow</button> </td>
+                                    ';
+                                    echo "</tr>";
+                                }
+                                    echo "</table>";
+                            ?>
+
+                                    </ul>
+                                    
+                                </li>
+                               
+                            </ul>
+                        </li>
+                        </div>
+                        <div class="col-md-4">
+                         <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="glyphicon glyphicon-user"></i>
+                                <span>Following <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu bg-light-blue">
+                                <!-- User image -->
+                                <li class="user-header bg-light-blue">
+                                    <ul style="list-style-type: none">
+                            <?php
+                                echo "<table>";
+                                foreach ($newfollowing_list as $newfollowing) {
+                                    
+                                    echo "<tr>";
+                                    echo "<td> <a  style='color:#FFFFFF; text-align:left;' id = '".$newfollowing["user1_id"]."'' onclick='markActiveLink1(this);'>".$newfollowing['user1_id']."</a> </td>";
+                                    echo '
+                                        <td> <button style="text-align:right;" name ="'.$newfollowing["user1_id"].'" class="btn btn-success btn-flat">Follow</button> </td>
+                                    ';
+                                    
+                                    echo "</tr>";
+                                }
+                                    echo "</table>";
+                            ?>
+
+                                    </ul>
+                                    
+                                </li>
+                            </ul>
+                        </li>
+                               </div>
+                        </ul>
+                    </row>
            </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
