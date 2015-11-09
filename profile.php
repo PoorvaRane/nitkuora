@@ -319,6 +319,7 @@
                     </div>
                     
                    
+                    
                 </section>
                 <!-- /.sidebar -->
             </aside>
@@ -327,6 +328,72 @@
             <aside class="right-side">
                <!-- Main content -->
                 <section class="content">
+                     <?php
+                     $follow=$user_info["user_id"];
+
+    $sqlf="select * from audit where user1_id ='$follow'";
+$news=$conn->query($sqlf);
+echo "<h2 align='center' >Recent Activity</h2>";
+?>
+
+<ul align="center" style="list-style-type: none">
+<?php
+  if($news->num_rows==0)
+  {
+    echo "<h1>u have no friends.</h1>";
+  }
+
+  if($news->num_rows>0)
+  {
+    #echo"<h1>length of results is '$news->num_rows' </h1>";
+    while($ne=$news->fetch_assoc())
+    {
+     $user1=$ne["user1_id"];
+     $user2=$ne["user2_id"];
+     $q_id=$ne["question_id"];
+     $a_id=$ne["answer_id"];
+     $t_id=$ne["topic_id"];
+     $c_id=$ne["comment_id"];
+     $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+     echo "<li>";
+     echo $user1_name["name"];
+     if (! is_null($user2))
+     {
+        $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
+        echo " now follows ".$user2_name["name"];
+     } 
+      if (! is_null($t_id))
+     {
+        $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
+        echo " now follows ".$topic["topic_name"];
+     } 
+     if (! is_null($q_id))
+     {
+        $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
+        echo " posted ".$question["question_name"];
+     } 
+     if (! is_null($a_id))
+     {
+        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+        echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
+     } 
+     if (! is_null($c_id))
+     {
+        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+        echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];
+     } 
+     
+
+     echo "</li>";
+
+
+    }
+  } 
+?>
+</ul>
             </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->

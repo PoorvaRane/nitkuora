@@ -16,9 +16,9 @@
      $username = $_GET['username']; 
     $user_id = $_SESSION['user'];
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
-    $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+    $sql2 = "SELECT * FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
     $sql3 = "SELECT * FROM user where user_id = '$username'";
-    $sql4 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$username')";
+    $sql4 = "SELECT * FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$username')";
     $sql5 = "SELECT * FROM follower_following where user1_id = '$username'";
     $sql6 = "SELECT * FROM follower_following where user2_id = '$username'";
     $result1 = $conn->query($sql1);
@@ -290,7 +290,7 @@
                             <?php
                                 foreach ($topic_list as $topic) {
                                     echo "<li>";
-                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a ' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
@@ -324,7 +324,19 @@
 
                 <div class="col-md-2">
                     <br>
-                    <a class="btn btn-success btn-flat">Follow</a>
+                    <?php
+                    $follow=$newuser_info["user_id"];
+                    if($conn->query("select * from follower_following where user1_id='$user_id' and user2_id='$follow' ")->num_rows==0)
+                    {
+                        
+                     echo "<a id = '".$follow."'' onclick='FollowPerson(this);''>  <button style='text-align:right;'  name ='person'  class='btn btn-success btn-flat'>Follow</button></a> ";
+                    }
+                    else
+                    {
+                       echo "  <button style='text-align:right;'  name ='person'  class='btn btn-disabled btn-flat'>Follow</button> ";
+                   
+                    }
+                    ?>
                 </div>   
                 <hr>
                 <br>
@@ -347,16 +359,17 @@
                             <?php
                                 echo "<table>";
                                 foreach ($newtopic_list as $newtopic) {
-                                    
+                                    $ti=$newtopic["topic_id"];
                                     echo "<tr>";
-                                    echo "<td> <a href='topic.php'  style='color:#FFFFFF; text-align:left;' id = '".$newtopic["topic_name"]."'' onclick='markActiveLink(this);'>".$newtopic["topic_name"]."</a> </td>";
-                                    echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">
-                                        <td> <button style="text-align:right;" name ="'.$newtopic["topic_name"].'" class="btn btn-success btn-flat">Follow</button> </td>
-                                        </form>
-                                    ';
-                                    if(isset($_POST[$newtopic["topic_name"]])){
-                                        $temp = $newtopic["topic_name"];
-                                        echo $temp;
+                                    echo "<td> <a style=color:#FFFFFF; text-align:left;' id = '".$newtopic["topic_name"]."'' onclick='markActiveLink(this);'>".$newtopic["topic_name"]."</a> </td>";
+                                    if($conn->query("select * from follower_topic where user_id='$user_id' and topic_id='$ti'")->num_rows==0)
+                                    {
+                                     echo "<td><a id = '".$newtopic["topic_name"]."'' onclick='FollowTopic(this);''>  <button style='text-align:right;'  name ='topic'  class='btn btn-success btn-flat'>Follow</button></a> </td>";
+                                    }
+                                    else
+                                    {
+                                       echo "<td>  <button style='text-align:right;'  name ='topic'  class='btn btn-disabled btn-flat'>Follow</button></a> </td>";
+                                   
                                     }
                                     echo "</tr>";
                                 }
@@ -374,25 +387,35 @@
                          <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span>Followers <i class="caret"></i></span>
+                                <span>Following <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu bg-light-blue">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                     <ul style="list-style-type: none">
+                                    <ul style="list-style-type: none">
                             <?php
                                 echo "<table>";
                                 foreach ($newfollowers_list as $newfollower) {
                                     echo "<tr>";
+                                    $user2_id=$newuser_info["user_id"];
+                                    $follow=$newfollower["user2_id"];
                                     echo "<td> <a style='color:#FFFFFF; text-align:left;' id = '".$newfollower["user2_id"]."'' onclick='markActiveLink(this);'>".$newfollower["user2_id"]."</a> </td>";
-                                    echo '
-                                        <td> <button style="text-align:right;" name ="'.$newfollower["user2_id"].'" class="btn btn-success btn-flat">Follow</button> </td>
-                                    ';
+                                   if($conn->query("select * from follower_following where user1_id='$user_id' and user2_id='$follow'")->num_rows==0)
+                                    {
+                                        if($user_id!=$follow)
+                                     echo "<td><a id = '".$newfollower["user2_id"]."'' onclick='FollowPerson(this);''>  <button style='text-align:right;'  name ='person'  class='btn btn-success btn-flat'>Follow</button></a> </td>";
+                                    }
+                                    else
+                                    {
+                                       echo "<td>  <button style='text-align:right;'  name ='person'  class='btn btn-disabled btn-flat'>Follow</button> </td>";
+                                   
+                                    }
+                                    
                                     echo "</tr>";
                                 }
                                     echo "</table>";
                             ?>
-
                                     </ul>
                                     
                                 </li>
@@ -404,7 +427,7 @@
                          <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
-                                <span>Following <i class="caret"></i></span>
+                                <span>Followers <i class="caret"></i></span>
                             </a>
                             <ul class="dropdown-menu bg-light-blue">
                                 <!-- User image -->
@@ -413,12 +436,19 @@
                             <?php
                                 echo "<table>";
                                 foreach ($newfollowing_list as $newfollowing) {
-                                    
+                                    $follow=$newfollowing["user1_id"];
                                     echo "<tr>";
                                     echo "<td> <a  style='color:#FFFFFF; text-align:left;' id = '".$newfollowing["user1_id"]."'' onclick='markActiveLink1(this);'>".$newfollowing['user1_id']."</a> </td>";
-                                    echo '
-                                        <td> <button style="text-align:right;" name ="'.$newfollowing["user1_id"].'" class="btn btn-success btn-flat">Follow</button> </td>
-                                    ';
+                                     if($conn->query("select * from follower_following where user1_id='$user_id' and user2_id='$follow' ")->num_rows==0)
+                                    {
+                                        if($user_id!=$follow)
+                                     echo "<td><a id = '".$newfollowing["user1_id"]."'' onclick='FollowPerson(this);''>  <button style='text-align:right;'  name ='person'  class='btn btn-success btn-flat'>Follow</button></a> </td>";
+                                    }
+                                    else
+                                    {
+                                       echo "<td>  <button style='text-align:right;'  name ='person'  class='btn btn-disabled btn-flat'>Follow</button> </td>";
+                                   
+                                    }
                                     
                                     echo "</tr>";
                                 }
@@ -431,8 +461,78 @@
                             </ul>
                         </li>
                                </div>
+
                         </ul>
+                        
                     </row>
+
+                     <?php
+                     $follow=$newuser_info["user_id"];
+
+    $sqlf="select * from audit where user1_id ='$follow'";
+$news=$conn->query($sqlf);
+echo "<h2 align='center' >Recent Activity</h2>";
+?>
+
+<ul align="center" style="list-style-type: none">
+<?php
+  if($news->num_rows==0)
+  {
+    echo "<h1>u have no friends.</h1>";
+  }
+
+  if($news->num_rows>0)
+  {
+    #echo"<h1>length of results is '$news->num_rows' </h1>";
+    while($ne=$news->fetch_assoc())
+    {
+     $user1=$ne["user1_id"];
+     $user2=$ne["user2_id"];
+     $q_id=$ne["question_id"];
+     $a_id=$ne["answer_id"];
+     $t_id=$ne["topic_id"];
+     $c_id=$ne["comment_id"];
+     $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
+     echo "<li>";
+     echo $user1_name["name"];
+     if (! is_null($user2))
+     {
+        $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
+        echo " now follows ".$user2_name["name"];
+     } 
+      if (! is_null($t_id))
+     {
+        $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
+        echo " now follows ".$topic["topic_name"];
+     } 
+     if (! is_null($q_id))
+     {
+        $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
+        echo " posted ".$question["question_name"];
+     } 
+     if (! is_null($a_id))
+     {
+        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+        echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
+     } 
+     if (! is_null($c_id))
+     {
+        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+        echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];
+     } 
+     
+
+     echo "</li>";
+
+
+    }
+  } 
+?>
+</ul>
+
            </section>
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
@@ -477,9 +577,18 @@
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "topic.php?topic_name=" + javascriptVariable; 
             }
+            function FollowTopic(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "follow.php?topic_name=" + javascriptVariable;
 
+            }
+        function FollowPerson(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "followp.php?userid=" + javascriptVariable;
+
+            }
         </script>
-
+        <?php  $_SESSION["stalk"]=$newuser_info['user_id']; ?>
         <?php
             $conn->close();
         ?>

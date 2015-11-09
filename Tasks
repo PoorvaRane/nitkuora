@@ -22,3 +22,24 @@ TASKS:
                                     echo "<a id = '".$follower["user2_id"]."'' onclick='markActiveLink1(this);'>".$follower["user2_id"]."</a>";
                                     echo "</li>";
                                 }
+
+
+
+                                 if($conn->query("select * from follower_following where user1_id='$user_id' and user2_id='$user2_id'")->num_rows==0)
+                                    {
+                                     echo "<td><a id = '".$newfollower["user2_id"]."'' onclick='FollowPerson(this);''>  <button style='text-align:right;'  name ='person'  class='btn btn-success btn-flat'>Follow</button></a> </td>";
+                                    }
+                                    else
+                                    {
+                                       echo "<td>  <button style='text-align:right;'  name ='person'  class='btn btn-disabled btn-flat'>Follow</button> </td>";
+                                   
+                                    }
+                                    
+
+
+        function FollowPerson(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "followp.php?userid=" + javascriptVariable;
+
+            }
+                              

@@ -92,13 +92,14 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-                            <form action="activity-search.php" method="get" class="sidebar-form">
+                            <form action="activity-search.php" method="post" class="sidebar-form">
                                 <div class="input-group">
                                     <input type="text" name="q" class="form-control" placeholder="Search"/>
                                     <span class="input-group-btn">
-                                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                                        <input type='submit' name='seach' id='search-btn' value='Search' class="btn btn-flat"/>
                                     </span>
                                 </div>
+
                             </form>
                     <!-- /.search form -->
                         </li>
@@ -258,7 +259,7 @@
                             <?php
                                 foreach ($topic_list as $topic) {
                                     echo "<li>";
-                                    echo "<a href='topic.php' id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a  id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
