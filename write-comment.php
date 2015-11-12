@@ -34,7 +34,7 @@
 			$result2 = $conn->query($sql2);
 
 			if($result2 === TRUE){
-				echo "Answer posted!";
+				echo "Comment posted!";
 			}
 		}
 
