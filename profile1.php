@@ -519,7 +519,7 @@ echo "<h2 align='center' >Recent Activity</h2>";
      } 
      if (! is_null($c_id))
      {
-        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+         if($conn->query("select comment_name from comment where comment_id='$c_id'")->num_rows>0) $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
         $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
         echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];

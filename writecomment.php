@@ -224,10 +224,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="index.html" class="btn btn-default btn-flat">Home</a>
+                                        <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="pages/example/login.html" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>

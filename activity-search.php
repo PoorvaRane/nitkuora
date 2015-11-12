@@ -318,7 +318,7 @@
                     echo "<li>";
 
                    # echo "<a id = '".$us["nuser"]."' name = '".$us["name"]."' onclick='user(this);'>".$us["name"]."</a>";
-                     echo "<a id = '".$us["user_id"]."'' onclick='user(this);'>".$us["name"]."</a>";
+                     echo "<a id = '".$us["user_id"]."' onclick='user(this);'>".$us["name"]."</a>";
                     echo "</li>";
                 }
               
@@ -393,10 +393,10 @@
                 window.location.href = "question.php?question_id=" + javascriptVariable; 
             }
             function user(el) {   
-                            alert("1");
+                           // alert("1");
                             var javascriptVariable = $(el).attr("id");
 
-                            alert(javascriptVariable);
+                            //alert(javascriptVariable);
                             window.location.href = "profile1.php?username=" + javascriptVariable; 
                         }
             function topic(el) {   

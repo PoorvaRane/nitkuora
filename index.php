@@ -304,34 +304,37 @@ echo "<h2 align='center' >NewsFeed</h2>";
      $c_id=$ne["comment_id"];
      $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
      echo "<li>";
-     echo $user1_name["name"];
+     echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
      if (! is_null($user2))
      {
-        $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
-        echo " now follows ".$user2_name["name"];
+        $user2_name=$conn->query("select * from user where user_id='$user2'")->fetch_assoc();
+        echo " now follows <a id ='".$user2_name["user_id"]."' onclick='user(this);'>".$user2_name["name"]."</a>";
+     
      } 
       if (! is_null($t_id))
      {
-        $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
-        echo " now follows ".$topic["topic_name"];
+        $topic=$conn->query("select * from topic where topic_id='$t_id'")->fetch_assoc();
+        echo " now follows <a id = '".$topic["topic_id"]."' onclick='topic(this);'>".$topic["topic_name"]."</a>";
+        
      } 
      if (! is_null($q_id))
      {
-        $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
-        echo " posted ".$question["question_name"];
+        $question=$conn->query("select * from question where question_id='$q_id'")->fetch_assoc();
+        echo " posted <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
+      
      } 
      if (! is_null($a_id))
      {
-        $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
-        echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
+        $answer=$conn->query("select * from answer where answer_id='$a_id'")->fetch_assoc();
+        $question=$conn->query("select * from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+        echo " answered <a id = '".$answer["answer_id"]."' onclick='answer1(this);'>".$answer["answer_name"]."  </a> to question <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
      } 
      if (! is_null($c_id))
      {
-        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
-        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+        if($conn->query("select comment_name from comment where comment_id='$c_id'")->num_rows>0) $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc() ;
+        $answer=$conn->query("select * from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
-        echo " commented ".$comment["comment_name"]." on ".$answer["answer_name"]." on the question ".$question["question_name"];
+        echo " commented ".$comment["comment_name"]." on <a id = '".$answer["answer_id"]."' onclick='answer1(this);'>".$answer["answer_name"]."  </a> on the question <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
      } 
      
 
@@ -388,6 +391,28 @@ echo "<h2 align='center' >NewsFeed</h2>";
                 window.location.href = "topic.php?topic_name=" + javascriptVariable; 
             }
 
+        </script>
+         <script type="text/javascript">
+            function question(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "question.php?question_id=" + javascriptVariable; 
+            }
+            
+            function answer1(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "writecomment.php?answer=" + javascriptVariable; 
+            }
+            function user(el) {   
+                           // alert("1");
+                            var javascriptVariable = $(el).attr("id");
+
+                            //alert(javascriptVariable);
+                            window.location.href = "profile1.php?username=" + javascriptVariable; 
+                        }
+            function topic(el) {   
+                            var javascriptVariable =  $(el).attr("id");
+                            window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+                        }
         </script>
 
         <?php
