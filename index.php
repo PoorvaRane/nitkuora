@@ -288,12 +288,12 @@ echo "<h2 align='center' >NewsFeed</h2>";
 <?php
   if($news->num_rows==0)
   {
-    echo "<h1>u have no friends.</h1>";
+    echo "<h1>There's no activity to show.</h1>";
   }
 
   if($news->num_rows>0)
   {
-    echo"<h1>length of results is '$news->num_rows' </h1>";
+    //echo"<h1>length of results is '$news->num_rows' </h1>";
     while($ne=$news->fetch_assoc())
     {
      $user1=$ne["user1_id"];

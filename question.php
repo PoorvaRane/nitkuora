@@ -275,7 +275,7 @@
                             ?>
                         </ul>
                     </div>
-                   
+                 
                    
                 </section>
                 <!-- /.sidebar -->
@@ -283,44 +283,48 @@
 
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">
-               <!-- Main content -->
-                <section class="content-header">
-                <img-circle>
+               <section class="content">
+                               <img-circle>
 
                 </img-circle>
-                    <h1>
+              <div class="row">  <div class="col-sm-10"> <h3 >
                         <?php echo $question["question_name"]; ?>
                        
-                    </h1>
-                    <br>
+                    </h3></div>
+                                      
+                     <?php echo '<br><div class="col-sm-2"><a class="btn btn-success" name="answer" onclick="sendQuestion(this);" id="'.$question["question_name"].'">Answer</a>
+                            </div>'; ?>
+                </div>
+              
+                <hr>
                     <?php
+
                     if($result2->num_rows > 0)
                     {
-                      
-                    
                     echo "<dl>";
                     while($answer=$result2->fetch_assoc())
                     {
                         $ua=$answer["a_user_id"];
                         $un=$conn->query("select name from user where user_id='$ua'")->fetch_assoc();
                         $name=$answer["answer_name"];
-                        echo"<dt>";
+                        echo '<dt class="col-sm-10">';
                         echo"'$name'";
                         echo"</dt>";
-                        echo"<dd>".$un["name"]."</dd>";
-                        echo "<br>";
+                        echo'<dd class="col-sm-10">'.$un["name"]."</dd>";
+                       
                         echo '<div class="col-sm-2"><a class="btn btn-success" name="comment" onclick="sendComment(this);" id="'.$answer["answer_id"].'">View Comments</a>
                             </div>';
+                        echo "<br/>";
+                        echo "<hr/>";
+
                     }
                     echo "</dl>";
                     }
                     echo "<br><br>";
-                     echo '<div class="col-sm-2"><a class="btn btn-success" name="answer" onclick="sendQuestion(this);" id="'.$question["question_name"].'">Answer</a>
-                            </div>';
+                    
                     ?>
                   
-                </section>
-                <section class="content">
+               
 
                 
 

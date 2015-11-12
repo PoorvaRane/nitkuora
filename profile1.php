@@ -142,7 +142,7 @@
                         </li>
                         <!-- Notifications: style can be found in dropdown.less -->
                         <li class="dropdown notifications-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-warning"></i>
                                 <span class="label label-warning">10</span>
                             </a>
@@ -234,7 +234,7 @@
                     
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
                                 <span> <?php echo $user_info['name']; ?> <i class="caret"></i></span>
                             </a>
@@ -349,7 +349,7 @@
                     <ul style="list-style-type: none">
                         <div class="col-md-4">
                         <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-globe"></i>
                                 <span>Topics Following <i class="caret"></i></span>
                             </a>
@@ -386,7 +386,7 @@
                     </div>
                     <div class="col-md-4">
                          <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
                                 <span>Following <i class="caret"></i></span>
                             </a>
@@ -426,7 +426,7 @@
                         </div>
                         <div class="col-md-4">
                          <li class="dropdown user user-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="glyphicon glyphicon-user"></i>
                                 <span>Followers <i class="caret"></i></span>
                             </a>
@@ -584,6 +584,7 @@ echo "<h2 align='center' >Recent Activity</h2>";
 
             }
         function FollowPerson(el) {   
+                alert("hi");
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "followp.php?userid=" + javascriptVariable;
 
