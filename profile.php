@@ -109,13 +109,14 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-                            <form action="activity-search.php" method="get" class="sidebar-form">
+                            <form action="activity-search.php" method="post" class="sidebar-form">
                                 <div class="input-group">
                                     <input type="text" name="q" class="form-control" placeholder="Search"/>
                                     <span class="input-group-btn">
-                                        <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
+                                        <input type='submit' name='seach' id='search-btn' value='Search' class="btn btn-flat"/>
                                     </span>
                                 </div>
+
                             </form>
                     <!-- /.search form -->
                         </li>
@@ -239,7 +240,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="logout.php?logout" class="btn btn-default btn-flat">Sign out</a>

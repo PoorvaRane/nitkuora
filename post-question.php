@@ -91,7 +91,7 @@
                         <!-- Messages: style can be found in dropdown.less-->
                         <li>
                         <!-- search form -->
-                            <form action="activity-search.php" method="post" class="sidebar-form">
+                           <form action="activity-search.php" method="post" class="sidebar-form">
                                 <div class="input-group">
                                     <input type="text" name="q" class="form-control" placeholder="Search"/>
                                     <span class="input-group-btn">
