@@ -223,7 +223,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
@@ -257,9 +257,9 @@
                         <ul style="list-style-type: none">
 
                             <?php
-                                foreach ($topic_list as $topic) {
+                                foreach ($topic_list as $topicName) {
                                     echo "<li>";
-                                    echo "<a  id = '".$topic["topic_name"]."'' onclick='markActiveLink(this);'>".$topic["topic_name"]."</a>";
+                                    echo "<a id = '".$topicName["topic_name"]."'' onclick='markActiveLink(this);'>".$topicName["topic_name"]."</a>";
                                     echo "</li>";
                                 }
                             ?>
@@ -383,6 +383,7 @@ echo "<h2 align='center' >NewsFeed</h2>";
         <script type="text/javascript">
 
             function markActiveLink(el) {   
+               
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "topic.php?topic_name=" + javascriptVariable; 
             }

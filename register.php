@@ -93,6 +93,7 @@
         <script src="js/bootstrap.min.js" type="text/javascript"></script>
 
         <script type="text/javascript">
+            jQuery.ready();
             var checkboxes = $("input[type='checkbox']");
             var submitButt = document.getElementById("submit");
 

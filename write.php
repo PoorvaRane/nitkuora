@@ -224,7 +224,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="profile.html" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="logout.php?logout" class="btn btn-default btn-flat">Sign out</a>
@@ -279,18 +279,19 @@
                         <textarea id="question" name="question" class="form-control" required ></textarea>
 
                     <?php
-                        $sql = "SELECT topic_name FROM topic";
-                        $result = $conn->query($sql);
+                        $sql5 = "SELECT topic_name FROM topic";
+                        $result5 = $conn->query($sql5);
 
-                        if ($result->num_rows > 0) {
+                        if ($result5->num_rows > 0) {
                             // output data of each row
-                            while($row = $result->fetch_assoc()) {
-                                echo "<input type='checkbox' id=".$row["topic_name"]." value=".$row["topic_name"]." name='topic[]'>".$row["topic_name"]."<br>";
+                            while($row = $result5->fetch_assoc()) {
+                              //  echo "hi";
+                                echo "<input type='checkbox' id='".$row["topic_name"]."' value='".$row["topic_name"]."' name='topic[]' >".$row["topic_name"]." </input><br>";
                             }
                         } 
                     ?>
-                    </br>
-                    <button type="submit" id="submit" class="btn bg-blue btn-block" name="submit"  style="width:100px; height:35px" >Post</button>
+                    <br/>
+                    <input type="submit" id="submit" class="btn bg-blue btn-block" name="submit" value="Post" style="width:100px; height:35px" ></input>
                     </form>
                </section>
                 
@@ -336,20 +337,19 @@
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
 
         <script type="text/javascript">
+            jQuery.ready();
             var checkboxes = $("input[type='checkbox']");
-            console.log(checkboxes);
-            var submitButt = document.getElementById("submit");
+           console.log(checkboxes);
 
+            var submitButt = document.getElementById("submit");
+           // alert(submitButt);
             if($("input:checkbox:checked").length==0){
-                    console.log("if");
                     submitButt.disabled = true;
             } else {
-                console.log("else");
                 submitButt.disabled = false;
             }
 
             checkboxes.click(function() {
-                console.log("click");
                 if($("input:checkbox:checked").length==0){
                     submitButt.disabled = true;
                 } else {

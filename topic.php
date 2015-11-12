@@ -307,9 +307,9 @@
                             echo '<br><div class="row"><li >
                             <div class="col-sm-10">
                             <b>'.$row["question_name"].'</b></div>
-                            <div class="col-sm-2"><a class="btn btn-success" name="answer" href="answer.php" onclick="sendQuestion(this);" id="'.$row["question_name"].'">Answer</a>
+                            <div class="col-sm-2"><a class="btn btn-success" name="answer" onclick="sendQuestion(this);" id="'.$row["question_name"].'">Answer</a>
                             </div>
-                            <div class="col-sm-10"> this is the answer </div>
+                            <div class="col-sm-10"> <a onClick="sendAnswer(this);"> </a></div>
                         </li></div>
                         <br>';
                         echo "<hr>";
@@ -367,6 +367,11 @@
             function sendQuestion(el) {   
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "answer.php?question=" + javascriptVariable; 
+            }
+            function sendAnswer(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                $_SESSION['current_answer'] = javascriptVariable; 
+                window.location.href = "write-comment.php"; 
             }
         </script>
 
