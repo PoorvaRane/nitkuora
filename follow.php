@@ -27,6 +27,7 @@
 			
 			$sql1 = "insert into follower_topic (user_id, topic_id) values('$user_id','$t_id')";
 			$result = $conn->query($sql1);
+			var_dump($result);
 
 			if($result===true){
 				

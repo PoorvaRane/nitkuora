@@ -18,10 +18,12 @@
 
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
     $sql2 = "SELECT topic_name FROM topic WHERE topic_id IN (SELECT topic_id from follower_topic WHERE user_id = '$user_id')";
+
     $result1 = $conn->query($sql1);
     $result2 = $conn->query($sql2);
     if($result1->num_rows > 0){
         $user_info = $result1->fetch_assoc();
+
         if($result2->num_rows > 0){
             $topic_list = array();
             while($row = $result2->fetch_assoc()) {
@@ -112,11 +114,11 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-warning"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-warning"></span>
                             </a>
                             <?php 
                            # $notif=$conn->query("select * from audit where user2_id='$user_id' or user1_id in (select a_user_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
-                             $notif=$conn->query("select * from audit where user2_id='$user_id' or answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id = '$user_id')) or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id'))  or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
+                             $notif=$conn->query("select * from audit where user2_id='$user_id' or answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id = '$user_id')) or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id'))  or comment_id in (select comment_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) order by audit_id desc");
                           /* 
                              while($no=$notif->fetch_assoc())
                              {
@@ -169,7 +171,8 @@
                                      {
                                         
                                         $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+                                        $question=$conn->query("select * from question q join answer a on q.question_id=a.a_question_id where a.answer_id = '$a_id'")->fetch_assoc(); 
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         echo "Your question ".$question["question_name"]." got an answer  ".$answer["answer_name"]." posted by ".$us["name"];
                                                                               
@@ -177,15 +180,19 @@
                                   
                                      if (! is_null($c_id))
                                      {
-                                        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
-                                        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+                                        $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
+                                        $answer=$conn->query("select * from answer a join comment c on a.answer_id = c.c_answer_id where comment_id = '$c_id'")->fetch_assoc();
+
+                                        $question=$conn->query("select * from question q join answer a on a.a_question_id = q.question_id join comment c on a.answer_id = c.c_answer_id where comment_id='$c_id'")->fetch_assoc();
+
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        if($check['user_id']==$user_id)
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
+
+                                        if($check['a_user_id']==$user_id)
+                                        echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
+                                        echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
                                      } 
                                      
                                     echo"</a>";
@@ -209,11 +216,13 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                                    <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
                                             echo "<br>";
+                                            echo $user_info['picture'];
+                                              echo "<br>";
                                             echo $user_info['bio'];
                                         ?>
 <!--                                         <small>Member since Nov. 2012</small> -->
@@ -243,7 +252,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                             <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id'];  ?></p>
@@ -279,7 +288,7 @@
 
                  <?php
 
-    $sqlf="select * from audit where user1_id in (select user2_id from follower_following where user1_id='$user_id' ) or user2_id in (select user2_id from follower_following where user1_id='$user_id' )";
+    $sqlf="select * from audit where user1_id in (select user2_id from follower_following where user1_id='$user_id' ) or user2_id in (select user2_id from follower_following where user1_id='$user_id' ) order by audit_id desc";
 $news=$conn->query($sqlf);
 echo "<h2 align='center' >NewsFeed</h2>";
 ?>
@@ -331,10 +340,20 @@ echo "<h2 align='center' >NewsFeed</h2>";
      } 
      if (! is_null($c_id))
      {
-        if($conn->query("select comment_name from comment where comment_id='$c_id'")->num_rows>0) $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc() ;
-        $answer=$conn->query("select * from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
-        echo " commented ".$comment["comment_name"]." on <a id = '".$answer["answer_id"]."' onclick='answer1(this);'>".$answer["answer_name"]."  </a> on the question <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
+        $sqlc=$conn->query("select * from comment where comment_id='$c_id'");
+        if($sqlc->num_rows>0){
+
+            $comment=$sqlc->fetch_assoc();
+            $c_id = $comment['comment_id'];
+            $answer=$conn->query("select * from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
+
+            $question=$conn->query("select * from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+
+            echo " commented ".$comment["comment"]." on <a id = '".$answer["answer_id"]."' onclick='answer1(this);'>".$answer["answer_name"]."  </a> on the question <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
+        }
+        else{
+            echo $conn->error;
+        }
      } 
      
 

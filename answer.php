@@ -113,7 +113,7 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-warning"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-warning"></span>
                             </a>
                             <?php 
                            # $notif=$conn->query("select * from audit where user2_id='$user_id' or user1_id in (select a_user_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
@@ -178,15 +178,15 @@
                                   
                                      if (! is_null($c_id))
                                      {
-                                        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+                                        $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
                                         $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
                                         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
                                         if($check['user_id']==$user_id)
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
+                                        echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
+                                        echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
                                      } 
                                      
                                     echo"</a>";
@@ -210,7 +210,7 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                                     <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -244,7 +244,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                             <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id']; ?></p>
@@ -300,27 +300,8 @@
                         <button name="submit" id="submit" class="btn btn-success">Post Answer</button></div>
                         </form>
                             <br/>
-                        <h4>
-                            Previous Answers:
-                        </h4>
-                        <ul class="name wha you want Poorva" style =" list-style-type: none ">
-                        <li >
-                            <div class="col-sm-12">
-                            <b>Answer 1  </b></div>
-                        </li>
-                         <hr>
-                         <li >
-                            <div class="col-sm-12">
-                            <b>Answer 2  </b></div>
-                        </li>
-                         <hr>
-                         <li >
-                            <div class="col-sm-12">
-                            <b>Answer 3  </b></div>
-                        </li>
-                         <hr>
+                        
                        
-                        </ul>
                     </div>
                     
                 </section>

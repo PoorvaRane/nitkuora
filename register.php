@@ -22,7 +22,7 @@
 
         <div class="form-box" id="login-box">
             <div class="header">Sign Up</div>
-            <form action="activity-signup.php" method="post">
+            <form action="activity-signup.php" method="post" enctype="multipart/form-data">
                 <div class="body bg-gray">
                     <div class="form-group">
                         <input type="text" id = "name" name="name" class="form-control" placeholder="Full name" required />

@@ -1,0 +1,9 @@
+select * from question q join answer a on q.question_id=a.a_question_id where a.answer_id = '$a_id';
+
+select * from answer a join comment c on a.answer_id = c.c_answer_id where comment_id = '$c_id';
+
+select * from question q join answer a on a.a_question_id = q.question_id join comment c on a.answer_id = c.c_answer_id where comment_id='$c_id';
+
+select * from answer a join comment c on c.c_answer_id = a.answer_id where comment_id='$c_id';
+
+

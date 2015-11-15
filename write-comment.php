@@ -29,12 +29,13 @@
 			$temp1 = $result1->fetch_assoc();
 			$answer_id = $temp1["answer_id"];
 
-			$sql2 = "INSERT INTO comment (comment, c_answer_id, c_user_id) VALUES ('$comment', '$answer_id','$user')";
+			$sql2 = "INSERT INTO comment (comment, c_answer_id, c_user_id) VALUES ('$comment', '$current_answer','$user')";
 
 			$result2 = $conn->query($sql2);
 
 			if($result2 === TRUE){
 				echo "Comment posted!";
+				echo $current_answer;
 			}
 		}
 

@@ -23,10 +23,11 @@
 			
 			$user_id = $_SESSION['user'];
 			$topic=$_GET["userid"];
-			
+			var_dump($user_id);
 			
 			$sql1 = "insert into follower_following (user1_id, user2_id) values('$user_id','$topic')";
 			$result = $conn->query($sql1);
+			var_dump($result);
 
 			if($result===true){
 				
@@ -36,9 +37,7 @@
 				}
 				else
 			    {
-			    ?>
-			        <script type="text/javascript">alert('wrong details');</script>
-			        <?php
+			    	echo $conn->error;
 			    }
 			 
 			

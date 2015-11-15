@@ -86,6 +86,19 @@
 			$password =  $_POST['password'];
 			$bio =  $_POST['user_bio'];
 			$topic = $_POST['topic'];
+            if ($_FILES["fileToUpload"]["error"] > 0)
+            {
+              echo "Error: " . $_FILES["fileToUpload"]["error"] . "<br>";
+            }
+            else
+              {
+                
+
+            }
+            $image_dir= 'C:\xampp1\htdocs\nitkuora\nitkuora\img\\';
+                $image_dir1= 'img/';
+                move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $image_dir. $_FILES['fileToUpload']['name']);
+                $image = $image_dir1. $_FILES['fileToUpload']['name'];
 
 			$topic_length = count($topic);
 
@@ -97,7 +110,7 @@
 			}
 
 			else{
-				$sql2 = "INSERT INTO user (user_id, name, email, password, bio, no_topics_followed) VALUES ('$user_id', '$fullname','$email','$password','$bio','$topic_length')";
+				$sql2 = "INSERT INTO user (user_id, name, email, password, picture, bio, no_topics_followed) VALUES ('$user_id', '$fullname','$email','$password','$image','$bio','$topic_length')";
 				$result = $conn->query($sql2);
 
 				if($result === TRUE)

@@ -1,5 +1,7 @@
 <?php
 
+    ob_start();
+
     session_start();
     
     $servername = "localhost";
@@ -13,9 +15,12 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-
+    
     $question_id = $_GET['question_id']; 
+    $question_id2 = $question_id;
     $user_id = $_SESSION['user'];
+
+  
 
     $sql = "SELECT * FROM question where question_id = '$question_id'";
     $sql1 = "SELECT * FROM user where user_id = '$user_id'";
@@ -25,7 +30,7 @@
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        $question= $result->fetch_assoc();  
+        $question2= $result->fetch_assoc();  
     } 
 
     $result1 = $conn->query($sql1);
@@ -112,7 +117,7 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-warning"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-warning"></span>
                             </a>
                              <?php 
                            # $notif=$conn->query("select * from audit where user2_id='$user_id' or user1_id in (select a_user_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_user_id='$user_id')) or user1_id in (select c_user_id from comment where c_answer_id in (select answer_id from answer where a_question_id in (select question_id from question where q_user_id='$user_id'))) ");
@@ -177,15 +182,15 @@
                                   
                                      if (! is_null($c_id))
                                      {
-                                        $comment=$conn->query("select comment_name from comment where comment_id='$c_id'")->fetch_assoc();
+                                        $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
                                         $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
                                         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
                                         if($check['user_id']==$user_id)
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
+                                        echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
-                                        echo $us["name"]." commented ".$comment["comment_name"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
+                                        echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
                                      } 
                                      
                                     echo"</a>";
@@ -211,7 +216,7 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                                     <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -245,7 +250,7 @@
                     <!-- Sidebar user panel -->
                     <div class="user-panel">
                         <div class="pull-left image">
-                            <img src="img/avatar3.png" class="img-circle" alt="User Image" />
+                             <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id']; ?> </p>
@@ -288,11 +293,11 @@
 
                 </img-circle>
               <div class="row">  <div class="col-sm-10"> <h3 >
-                        <?php echo $question["question_name"]; ?>
+                        <?php echo $question2["question_name"]; ?>
                        
                     </h3></div>
                                       
-                     <?php echo '<br><div class="col-sm-2"><a class="btn btn-success" name="answer" onclick="sendQuestion(this);" id="'.$question["question_name"].'">Answer</a>
+                     <?php echo '<br><div class="col-sm-2"><a class="btn btn-success" name="answer" onclick="sendQuestion(this);" id="'.$question2["question_name"].'">Answer</a>
                             </div>'; ?>
                 </div>
               
@@ -306,16 +311,39 @@
                     {
                         $ua=$answer["a_user_id"];
                         $un=$conn->query("select name from user where user_id='$ua'")->fetch_assoc();
+                        $ai=$answer["answer_id"];
+                        //echo "<h2>'$ai'</h2>";
                         $name=$answer["answer_name"];
+                        $upvs=$answer["no_upvotes"];
+                        $dovs=$answer["no_downvotes"];
+                        
                         echo '<dt class="col-sm-10">';
                         echo"'$name'";
                         echo"</dt>";
                         echo'<dd class="col-sm-10">'.$un["name"]."</dd>";
+                        echo '<div class="col-sm-2" >UpVotes:- '.$upvs.'  DownVotes:-'.$dovs;
+                        $str="question.php?question_id=".$question_id;
+                        //echo "<h2>$str</h2>";
+                        $ch=
+                        $vcheck=$conn->query("select * from upvote where u_user_id='$user_id' and u_answer_id='$ai'");
+                        $vdcheck=$conn->query("select * from downvote where d_user_id='$user_id' and d_answer_id='$ai'");
+                        if($vcheck->num_rows==0 && $vdcheck->num_rows==0 )
+                        {
+                            
+                            echo "<a id = '".$ai."'' onclick='upvote(this);''>  <button style='text-align:right;'  name ='up'  class='btn btn-success btn-flat'>UpVote</button></a>";
+                            echo "<a id = '".$ai."'' onclick='downvote(this);''>  <button style='text-align:right;'  name ='down'  class='btn btn-success btn-flat'>DownVote</button></a>";
+
+                        }
+                        
                        
+                        
+                        echo '</div>';
                         echo '<div class="col-sm-2"><a class="btn btn-success" name="comment" onclick="sendComment(this);" id="'.$answer["answer_id"].'">View Comments</a>
                             </div>';
                         echo "<br/>";
                         echo "<hr/>";
+                        echo "<br> <br> <br> <br> <br> <br>";
+                        
 
                     }
                     echo "</dl>";
@@ -384,6 +412,32 @@
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "writecomment.php?answer=" + javascriptVariable; 
             }
+            function disableup()
+            {
+                document.getElementById('up').disabled = true;
+
+            }
+            function disabledown()
+            {
+                document.getElementById('down').disabled = true;
+
+            }
+            function upvote(el) 
+            {   
+                
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "activity-upvote.php?answerid=" + javascriptVariable;
+
+            }
+            function downvote(el) 
+            {   
+                
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "activity-downvote.php?answerid=" + javascriptVariable;
+
+            }
+
+
         </script>
 
 
