@@ -99,7 +99,6 @@
                 $image_dir1= 'img/';
                 move_uploaded_file($_FILES['fileToUpload']['tmp_name'], $image_dir. $_FILES['fileToUpload']['name']);
                 $image = $image_dir1. $_FILES['fileToUpload']['name'];
-
 			$topic_length = count($topic);
 
 			$sql1 = "SELECT * FROM user where user_id = '$user_id'";
@@ -117,7 +116,9 @@
 				{
 					echo '<p>YOUR REGISTRATION IS SUCCESSFUL <br></p>
 					<br/> <a href="login.html">Click here to login </a><br/> ';
-				}
+				}else{
+                    echo $conn->error;
+                }
 				
 				for($i = 0; $i < count($topic); $i++){
 					$sql3 = "SELECT topic_id from topic WHERE topic_name='$topic[$i]'";

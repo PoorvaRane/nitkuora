@@ -216,13 +216,12 @@
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
-                                    <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
-                                    <p>
+                                     <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
+                                     <p>
                                         <?php
                                             echo $user_info['name']; 
                                             echo "<br>";
-                                            echo $user_info['picture'];
-                                              echo "<br>";
                                             echo $user_info['bio'];
                                         ?>
 <!--                                         <small>Member since Nov. 2012</small> -->
@@ -253,6 +252,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id'];  ?></p>
@@ -311,35 +311,43 @@ echo "<h2 align='center' >NewsFeed</h2>";
      $a_id=$ne["answer_id"];
      $t_id=$ne["topic_id"];
      $c_id=$ne["comment_id"];
+     $up_id = $ne["upvote_id"];
+     $down_id = $ne["downvote_id"];
+
      $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
      echo "<li>";
-     echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
+     
      if (! is_null($user2))
      {
+        echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
         $user2_name=$conn->query("select * from user where user_id='$user2'")->fetch_assoc();
         echo " now follows <a id ='".$user2_name["user_id"]."' onclick='user(this);'>".$user2_name["name"]."</a>";
      
      } 
       if (! is_null($t_id))
      {
+        echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
         $topic=$conn->query("select * from topic where topic_id='$t_id'")->fetch_assoc();
         echo " now follows <a id = '".$topic["topic_id"]."' onclick='topic(this);'>".$topic["topic_name"]."</a>";
         
      } 
      if (! is_null($q_id))
      {
+        echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
         $question=$conn->query("select * from question where question_id='$q_id'")->fetch_assoc();
         echo " posted <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
       
      } 
      if (! is_null($a_id))
      {
+        echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
         $answer=$conn->query("select * from answer where answer_id='$a_id'")->fetch_assoc();
         $question=$conn->query("select * from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
         echo " answered <a id = '".$answer["answer_id"]."' onclick='answer1(this);'>".$answer["answer_name"]."  </a> to question <a id = '".$question["question_id"]."' onclick='question(this);'>".$question["question_name"]."</a>";
      } 
      if (! is_null($c_id))
      {
+        echo "<a id ='".$user1_name["name"]."' onclick='user(this);'>".$user1_name["name"]."</a>";
         $sqlc=$conn->query("select * from comment where comment_id='$c_id'");
         if($sqlc->num_rows>0){
 

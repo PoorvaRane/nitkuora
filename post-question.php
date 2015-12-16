@@ -209,6 +209,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -243,6 +244,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id'];  ?></p>

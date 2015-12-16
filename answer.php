@@ -211,6 +211,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -245,6 +246,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id']; ?></p>
@@ -301,7 +303,6 @@
                         </form>
                             <br/>
                         
-                       
                     </div>
                     
                 </section>
@@ -347,6 +348,14 @@
         
         <!-- AdminLTE for demo purposes -->
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+            function markActiveLink(el) {   
+               
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+        </script>
 
     </body>
 </html>

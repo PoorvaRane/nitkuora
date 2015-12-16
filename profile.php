@@ -186,7 +186,8 @@
                                      {
                                         
                                         $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+                                        $question=$conn->query("select * from question q join answer a on q.question_id=a.a_question_id where a.answer_id = '$a_id'")->fetch_assoc(); 
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         echo "Your question ".$question["question_name"]." got an answer  ".$answer["answer_name"]." posted by ".$us["name"];
                                                                               
@@ -195,11 +196,15 @@
                                      if (! is_null($c_id))
                                      {
                                         $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
-                                        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+                                        $answer=$conn->query("select * from answer a join comment c on a.answer_id = c.c_answer_id where comment_id = '$c_id'")->fetch_assoc();
+
+                                        $question=$conn->query("select * from question q join answer a on a.a_question_id = q.question_id join comment c on a.answer_id = c.c_answer_id where comment_id='$c_id'")->fetch_assoc();
+
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        if($check['user_id']==$user_id)
+
+                                        if($check['a_user_id']==$user_id)
                                         echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
                                         echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
@@ -215,8 +220,7 @@
                                 </ul>
                                 </li>
                                         
-                            </ul>
-                    
+                            </ul>                    
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -227,6 +231,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -261,6 +266,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id'];  ?></p>
@@ -284,14 +290,14 @@
                     </div>
 
                     <div>
-                       <b> Followers </b>  
+                       <b> Following </b>  
                         <span> <i class="fa fa-arrow-circle-o-right"></i></span>             
                     </div>
                     <div>
                         <ul style="list-style-type: none">
 
                             <?php
-                            if(!$followers_list === null){
+                            if(isset($followers_list)){
 
                             foreach ($followers_list as $follower) {
                                     echo "<li>";
@@ -304,19 +310,21 @@
                         </ul>
                     </div>
                     <div>
-                       <b> Following </b>  
+                       <b> Followers </b>  
                         <span> <i class="fa fa-arrow-circle-o-right"></i></span>             
                     </div>
                     <div>
                         <ul style="list-style-type: none">
 
                             <?php
-                            
+                            if(isset($following_list)){
+
                             foreach ($following_list as $following) {
                                     echo "<li>";
                                     echo "<a id = '".$following["user1_id"]."'' onclick='markActiveLink1(this);'>".$following["user1_id"]."</a>";
                                     echo "</li>";
                                 }
+                            }
                             ?>
                         </ul>
                     </div>
@@ -359,30 +367,35 @@ echo "<h2 align='center' >Recent Activity</h2>";
      $c_id=$ne["comment_id"];
      $user1_name=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
      echo "<li>";
-     echo $user1_name["name"];
+    
      if (! is_null($user2))
      {
+         echo $user1_name["name"];
         $user2_name=$conn->query("select name from user where user_id='$user2'")->fetch_assoc();
         echo " now follows ".$user2_name["name"];
      } 
       if (! is_null($t_id))
      {
+         echo $user1_name["name"];
         $topic=$conn->query("select topic_name from topic where topic_id='$t_id'")->fetch_assoc();
         echo " now follows ".$topic["topic_name"];
      } 
      if (! is_null($q_id))
      {
+         echo $user1_name["name"];
         $question=$conn->query("select question_name from question where question_id='$q_id'")->fetch_assoc();
         echo " posted ".$question["question_name"];
      } 
      if (! is_null($a_id))
      {
+         echo $user1_name["name"];
         $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
         echo " answered  ".$answer["answer_name"]." to question ".$question["question_name"];
      } 
      if (! is_null($c_id))
      {
+         echo $user1_name["name"];
        if($conn->query("select comment from comment where comment_id='$c_id'")->num_rows>0) $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
         $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
         $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
@@ -442,6 +455,13 @@ echo "<h2 align='center' >Recent Activity</h2>";
                 window.location.href = "profile1.php?username=" + javascriptVariable; 
             }
 
+            function markActiveLink(el) {   
+               
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+
+       
         </script>
 
         <?php

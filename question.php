@@ -49,7 +49,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>NITKuora | <?php echo $topic_name; ?></title>
+        <title>NITKuora | <?php echo $question_id; ?></title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- bootstrap 3.0.2 -->
         <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -174,7 +174,8 @@
                                      {
                                         
                                         $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+                                        $question=$conn->query("select * from question q join answer a on q.question_id=a.a_question_id where a.answer_id = '$a_id'")->fetch_assoc(); 
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         echo "Your question ".$question["question_name"]." got an answer  ".$answer["answer_name"]." posted by ".$us["name"];
                                                                               
@@ -183,11 +184,15 @@
                                      if (! is_null($c_id))
                                      {
                                         $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
-                                        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+                                        $answer=$conn->query("select * from answer a join comment c on a.answer_id = c.c_answer_id where comment_id = '$c_id'")->fetch_assoc();
+
+                                        $question=$conn->query("select * from question q join answer a on a.a_question_id = q.question_id join comment c on a.answer_id = c.c_answer_id where comment_id='$c_id'")->fetch_assoc();
+
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        if($check['user_id']==$user_id)
+
+                                        if($check['a_user_id']==$user_id)
                                         echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
                                         echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
@@ -217,6 +222,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -251,6 +257,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id']; ?> </p>
@@ -321,7 +328,8 @@
                         echo"'$name'";
                         echo"</dt>";
                         echo'<dd class="col-sm-10">'.$un["name"]."</dd>";
-                        echo '<div class="col-sm-2" >UpVotes:- '.$upvs.'  DownVotes:-'.$dovs;
+                        echo '<div class="col-sm-2" > Upvotes:- '.$upvs.' 
+                         Downvotes:-'.$dovs;
                         $str="question.php?question_id=".$question_id;
                         //echo "<h2>$str</h2>";
                         $ch=
@@ -435,6 +443,16 @@
                 var javascriptVariable =  $(el).attr("id");
                 window.location.href = "activity-downvote.php?answerid=" + javascriptVariable;
 
+            }
+
+             function sendu(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "view.php?a_id=" + javascriptVariable; 
+            }
+
+            function sendd(el) {   
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "view.php?a_id=" + javascriptVariable; 
             }
 
 

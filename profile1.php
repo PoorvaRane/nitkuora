@@ -201,7 +201,8 @@
                                      {
                                         
                                         $answer=$conn->query("select answer_name from answer where answer_id='$a_id'")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id='$a_id')")->fetch_assoc();
+                                        $question=$conn->query("select * from question q join answer a on q.question_id=a.a_question_id where a.answer_id = '$a_id'")->fetch_assoc(); 
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         echo "Your question ".$question["question_name"]." got an answer  ".$answer["answer_name"]." posted by ".$us["name"];
                                                                               
@@ -210,11 +211,15 @@
                                      if (! is_null($c_id))
                                      {
                                         $comment=$conn->query("select comment from comment where comment_id='$c_id'")->fetch_assoc();
-                                        $answer=$conn->query("select answer_name from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        $question=$conn->query("select question_name from question where question_id in (select a_question_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id'))")->fetch_assoc();
+                                        $answer=$conn->query("select * from answer a join comment c on a.answer_id = c.c_answer_id where comment_id = '$c_id'")->fetch_assoc();
+
+                                        $question=$conn->query("select * from question q join answer a on a.a_question_id = q.question_id join comment c on a.answer_id = c.c_answer_id where comment_id='$c_id'")->fetch_assoc();
+
+
                                         $us=$conn->query("select name from user where user_id='$user1'")->fetch_assoc();
                                         $check=$conn->query("select a_user_id from answer where answer_id in (select c_answer_id from comment where comment_id='$c_id')")->fetch_assoc();
-                                        if($check['user_id']==$user_id)
+
+                                        if($check['a_user_id']==$user_id)
                                         echo $us["name"]." commented ".$comment["comment"]." on your answer ".$answer["answer_name"]." to the question ".$question["question_name"];
                                         else
                                         echo $us["name"]." commented ".$comment["comment"]." on the answer ".$answer["answer_name"]." to your question ".$question["question_name"];
@@ -231,7 +236,6 @@
                                 </li>
                                         
                             </ul>
-                    
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a class="dropdown-toggle" data-toggle="dropdown">
@@ -242,6 +246,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                    
                                         <?php
                                             echo $user_info['name']; 
@@ -276,6 +281,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id'];  ?></p>
@@ -397,6 +403,8 @@
                                     <ul style="list-style-type: none">
                             <?php
                                 echo "<table>";
+                                if(isset($newfollowers_list)){
+
                                 foreach ($newfollowers_list as $newfollower) {
                                     echo "<tr>";
                                     $user2_id=$newuser_info["user_id"];
@@ -414,6 +422,7 @@
                                     }
                                     
                                     echo "</tr>";
+                                }
                                 }
                                     echo "</table>";
                             ?>
@@ -436,6 +445,8 @@
                                     <ul style="list-style-type: none">
                             <?php
                                 echo "<table>";
+                                if(isset($newfollowing_list)){
+
                                 foreach ($newfollowing_list as $newfollowing) {
                                     $follow=$newfollowing["user1_id"];
                                     echo "<tr>";
@@ -452,6 +463,7 @@
                                     }
                                     
                                     echo "</tr>";
+                                }
                                 }
                                     echo "</table>";
                             ?>

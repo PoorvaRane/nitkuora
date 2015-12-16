@@ -46,11 +46,7 @@
             $result5=$conn->query($sql5);
             $result6=$conn->query($sql6);
             $result7=$conn->query($sql7);
-            if($result6->num_rows > 0){
-            $user = array();
-            while($row = $result6->fetch_assoc()) {
-                array_push($user, $row);
-            }
+            
         }
 
 ?>
@@ -227,6 +223,7 @@
                                 <!-- User image -->
                                 <li class="user-header bg-light-blue">
                                      <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                                     <p>
                                         <?php
                                             echo $user_info['name']; 
@@ -261,6 +258,7 @@
                     <div class="user-panel">
                         <div class="pull-left image">
                              <?php echo '<img src= '.$user_info['picture'].' class="img-circle" alt="User Image"/>';?>
+                                    
                         </div>
                         <div class="pull-left info">
                             <p>Hello, <?php echo $user_info['user_id']; ?> </p>
@@ -313,14 +311,17 @@
                 }
             }            
 
-            
-                //  foreach ($user as $us) {
-                //     echo "<li>";
+             if($result6->num_rows>0)
+            {   
+                while($us1=$result6->fetch_assoc()) 
+                {
+                    echo "<li>";
 
-                //    # echo "<a id = '".$us["nuser"]."' name = '".$us["name"]."' onclick='user(this);'>".$us["name"]."</a>";
-                //      echo "<a id = '".$us["user_id"]."' onclick='user(this);'>".$us["name"]."</a>";
-                //     echo "</li>";
-                // }
+                   # echo "<a id = '".$us["nuser"]."' name = '".$us["name"]."' onclick='user(this);'>".$us["name"]."</a>";
+                     echo "<a id = '".$us1["user_id"]."' onclick='user(this);'>".$us1["name"]."</a>";
+                    echo "</li>";
+                }
+            }
         
 
             if($result7->num_rows>0)
@@ -336,13 +337,7 @@
 
 
         echo "</ul>";
-                
              
-            
-            
-        }
-        
-
         $conn->close();
         ?>
 
@@ -386,7 +381,15 @@
         
         <!-- AdminLTE for demo purposes -->
         <script src="js/AdminLTE/demo.js" type="text/javascript"></script>
+        <script type="text/javascript">
 
+            function markActiveLink(el) {   
+               
+                var javascriptVariable =  $(el).attr("id");
+                window.location.href = "topic.php?topic_name=" + javascriptVariable; 
+            }
+
+        </script>
         <script type="text/javascript">
             function question(el) {   
                 var javascriptVariable =  $(el).attr("id");
